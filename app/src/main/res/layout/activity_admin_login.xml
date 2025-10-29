@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Top app bar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="Admin Login"
+        app:titleTextColor="@android:color/white" />
+
+    <!-- Admin Login Section -->
+    <TextView
+        android:text="Admin Login"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/etAdminEmail"
+        android:hint="Admin Email"
+        android:inputType="textEmailAddress"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/etAdminPin"
+        android:hint="Admin PIN"
+        android:inputType="numberPassword"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnAdminLogin"
+        android:text="Login"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- Staff Login Section -->
+    <TextView
+        android:text="Staff Login"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_marginTop="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/etStaffEmail"
+        android:hint="Staff Email"
+        android:inputType="textEmailAddress"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/etStaffPin"
+        android:hint="Admin PIN (Admins only)"
+        android:inputType="numberPassword"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnStaffLogin"
+        android:text="Login"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnOpenAdminSetup"
+        android:text="Open Admin Portal (Setup Mode)"
+        android:enabled="false"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnBackToMain"
+        android:text="Back to Main"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

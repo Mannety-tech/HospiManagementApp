@@ -1,0 +1,11 @@
+<resources>
+    <string-array name="staff_roles">
+        <item>DOCTOR</item>
+        <item>NURSE</item>
+        <item>ADMIN</item>
+        <item>RECEPTIONIST</item>
+    </string-array>
+    <string name="app_name">HospiManagmenetApp</string>
+</resources>
+
+
