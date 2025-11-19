@@ -1,11 +1,20 @@
 <resources>
     <string-array name="staff_roles">
-        <item>DOCTOR</item>
-        <item>NURSE</item>
-        <item>ADMIN</item>
-        <item>RECEPTIONIST</item>
+        <item>Admin</item>
+        <item>GP</item>
+        <item>Emergency</item>
+        <item>Orthopedics</item>
+        <item>Nurse</item>
+        <item>Reception</item>
     </string-array>
-    <string name="app_name">HospiManagmenetApp</string>
+
+    <string name="app_name">HospiManagementApp</string>
+
+    <!-- Add this -->
+    <string name="select_patient">Select Patient</string>
 </resources>
+
+
+
 
 

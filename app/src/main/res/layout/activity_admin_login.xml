@@ -15,38 +15,6 @@
         app:title="Admin Login"
         app:titleTextColor="@android:color/white" />
 
-    <!-- Admin Login Section -->
-    <TextView
-        android:text="Admin Login"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:layout_marginTop="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/etAdminEmail"
-        android:hint="Admin Email"
-        android:inputType="textEmailAddress"
-        android:layout_marginTop="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/etAdminPin"
-        android:hint="Admin PIN"
-        android:inputType="numberPassword"
-        android:layout_marginTop="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/btnAdminLogin"
-        android:text="Login"
-        android:layout_marginTop="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <!-- Staff Login Section -->
     <TextView
         android:text="Staff Login"

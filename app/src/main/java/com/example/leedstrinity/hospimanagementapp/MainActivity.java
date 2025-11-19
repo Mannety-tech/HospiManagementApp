@@ -9,14 +9,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.room.Room;
+
+import com.example.leedstrinity.hospimanagementapp.data.AppDatabase;
+import com.example.leedstrinity.hospimanagementapp.feature.appointments.ui.AppointmentActivity;
+
 
 public class MainActivity extends AppCompatActivity {
+
+    private AppDatabase db; //  Room DB instance
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        // Initialize Room database
+        db = Room.databaseBuilder(
+                        getApplicationContext(),
+                        AppDatabase.class,
+                        "hospi_db"
+                ).fallbackToDestructiveMigration()
+                .build();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -66,10 +81,14 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-
-
+        Button openClinicalRecordButton = findViewById(R.id.btn_clinical_record);
+        openClinicalRecordButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ClinicalRecordActivity.class);
+            startActivity(intent);
+        });
     }
 }
+
 
 
 

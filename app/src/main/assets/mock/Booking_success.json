@@ -1,0 +1,10 @@
+{
+  "id": 3,
+  "patientNhsNumber": "1122334455",
+  "startTime": 1699110000000,
+  "endTime": 1699113600000,
+  "clinicianId": 103,
+  "clinicianName": "Dr. Patel",
+  "clinic": "Dermatology",
+  "status": "BOOKED"
+}

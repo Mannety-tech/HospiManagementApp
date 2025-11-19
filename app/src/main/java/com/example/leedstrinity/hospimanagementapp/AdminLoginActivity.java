@@ -23,10 +23,6 @@ public class AdminLoginActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Admin login views
-        etAdminEmail = findViewById(R.id.etAdminEmail);
-        etAdminPin = findViewById(R.id.etAdminPin);
-        btnAdminLogin = findViewById(R.id.btnAdminLogin);
 
         // Staff login views
         etStaffEmail = findViewById(R.id.etStaffEmail);
@@ -39,25 +35,13 @@ public class AdminLoginActivity extends AppCompatActivity {
         // Back to main button
         backToMainButton = findViewById(R.id.btnBackToMain); // Make sure this ID exists in your XML
 
-        // Admin login logic
-        btnAdminLogin.setOnClickListener(v -> {
-            String email = etAdminEmail.getText().toString().trim();
-            String pin = etAdminPin.getText().toString().trim();
-
-            if (email.equals("admin@example.com") && pin.equals("1234")) {
-                Toast.makeText(this, "Admin login successful", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, AdminPortalActivity.class));
-            } else {
-                Toast.makeText(this, "Invalid admin credentials", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         // Staff login logic
         btnStaffLogin.setOnClickListener(v -> {
             String email = etStaffEmail.getText().toString().trim();
             String pin = etStaffPin.getText().toString().trim();
 
-            if (!email.isEmpty() && !pin.isEmpty()) {
+            if (email.equals("admin@example.com") && pin.equals("1234")) {
                 Toast.makeText(this, "Staff login successful", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(this, MainActivity.class));
             } else {

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="?android:attr/selectableItemBackground">
+
+    <!-- 🧑 Patient NHS Number -->
+    <TextView
+        android:id="@+id/tvPatient"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NHS: xxxxxxxxxx"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="?android:textColorPrimary" />
+
+    <!-- 🩺 Clinician and Clinic Info -->
+    <TextView
+        android:id="@+id/tvClinician"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dr. Smith — Clinic A"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"
+        android:textColor="?android:textColorSecondary" />
+
+    <!-- ⏰ Appointment Time -->
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="01 Jan 2025 09:00 → 09:20"
+        android:textSize="14sp"
+        android:layout_marginTop="2dp"
+        android:textColor="?android:textColorSecondary" />
+</LinearLayout>
+
+

@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class PatientRecordActivity extends AppCompatActivity {
 
     private EditText nameEditText, ageEditText, genderEditText, contactEditText, notesEditText;
-    private Button saveRecordButton, backToMainButton; // ✅ Declare backToMainButton
+    private Button saveRecordButton, backToMainButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class PatientRecordActivity extends AppCompatActivity {
         contactEditText = findViewById(R.id.editTextContact);
         notesEditText = findViewById(R.id.editTextMedicalNotes);
         saveRecordButton = findViewById(R.id.buttonSaveRecord);
-        backToMainButton = findViewById(R.id.buttonBackToMain); // ✅ Initialize backToMainButton
+        backToMainButton = findViewById(R.id.buttonBackToMain);
 
         saveRecordButton.setOnClickListener(v -> {
             String name = nameEditText.getText().toString().trim();

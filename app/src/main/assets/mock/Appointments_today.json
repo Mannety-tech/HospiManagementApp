@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "patientNhsNumber": "1234567890",
+    "startTime": 1699095600000,
+    "endTime": 1699099200000,
+    "clinicianId": 101,
+    "clinicianName": "Dr. Smith",
+    "clinic": "Cardiology",
+    "status": "BOOKED"
+  },
+  {
+    "id": 2,
+    "patientNhsNumber": "9876543210",
+    "startTime": 1699102800000,
+    "endTime": 1699106400000,
+    "clinicianId": 102,
+    "clinicianName": "Dr. Jones",
+    "clinic": "Neurology",
+    "status": "BOOKED"
+  }
+]

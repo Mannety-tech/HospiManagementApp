@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:text="Admin Portal" />
 
+
         <Button
             android:id="@+id/btn_appointment"
             android:layout_width="340dp"
@@ -47,6 +48,12 @@
             android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:text="Patient Record" />
+
+        <Button
+            android:id="@+id/btn_clinical_record"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:text="Clinical Record" />
 
         <Button
             android:id="@+id/btn_biometric_auth"
