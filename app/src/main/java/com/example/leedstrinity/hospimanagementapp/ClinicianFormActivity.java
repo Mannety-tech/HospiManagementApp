@@ -1,7 +1,9 @@
 
 package com.example.leedstrinity.hospimanagementapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
-import com.example.leedstrinity.hospimanagementapp.data.AppDatabase;
+import com.example.leedstrinity.hospimanagementapp.AppDatabase;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Clinician;
 import com.example.leedstrinity.hospimanagementapp.feature.appointments.ui.adapters.ClinicianAdapter;
 
@@ -28,6 +30,7 @@ public class ClinicianFormActivity extends AppCompatActivity {
     private ClinicianAdapter clinicianAdapter;
     private AppDatabase db;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +38,7 @@ public class ClinicianFormActivity extends AppCompatActivity {
 
         // Room DB
         db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "hospital-db").build();
+                AppDatabase.class, "hospital_db").build();
 
         // Form fields
         nameEditText = findViewById(R.id.etClinicianName);
@@ -92,6 +95,14 @@ public class ClinicianFormActivity extends AppCompatActivity {
         Executors.newSingleThreadExecutor().execute(() -> {
             clinicianAdapter.setClinicians(db.clinicianDao().getAllClinicians());
         });
+
+        Button backToMainButton = findViewById(R.id.backToMainButton);
+        backToMainButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ClinicianFormActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
+
+
     }
 }
 

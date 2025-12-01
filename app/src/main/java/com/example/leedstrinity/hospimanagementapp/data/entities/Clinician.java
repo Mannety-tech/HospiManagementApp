@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.Ignore;
 
+
+
 @Entity(tableName = "clinicians")
 public class Clinician {
 

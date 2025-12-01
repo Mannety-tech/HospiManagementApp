@@ -2,8 +2,6 @@
 
 package com.example.leedstrinity.hospimanagementapp.domain;
 
-import android.content.Context;
-
 import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
 import com.example.leedstrinity.hospimanagementapp.data.repo.AppointmentRepository;
 
@@ -25,7 +23,7 @@ public class GetTodaysAppointmentsUseCaseTest {
     @Before
     public void setup() {
         mockRepo = mock(AppointmentRepository.class);
-        useCase = new GetTodaysAppointmentsUseCase(mockRepo); // requires constructor injection
+        useCase = new GetTodaysAppointmentsUseCase(mockRepo); // constructor injection
     }
 
     @Test
@@ -41,7 +39,17 @@ public class GetTodaysAppointmentsUseCaseTest {
         cal.add(Calendar.DAY_OF_MONTH, 1);
         long end = cal.getTimeInMillis();
 
-        Appointment a1 = new Appointment("1234567890", start, end, 101, "Dr. Smith", clinic, "BOOKED");
+        // ✅ Use the correct constructor
+        Appointment a1 = new Appointment(
+                "John Doe",      // patientName
+                "2025-11-25",    // date
+                "10:00",         // time
+                "Checkup",       // reason
+                "Dr. Smith",     // doctorName
+                start,           // start time
+                end              // end time
+        );
+
         List<Appointment> expected = Arrays.asList(a1);
 
         when(mockRepo.getTodaysAppointments(clinic, start, end)).thenReturn(expected);
@@ -49,7 +57,8 @@ public class GetTodaysAppointmentsUseCaseTest {
         List<Appointment> result = useCase.execute(clinic);
 
         assertEquals(1, result.size());
-        assertEquals("Dr. Smith", result.get(0).clinicianName);
+        assertEquals("Dr. Smith", result.get(0).doctorName);
         verify(mockRepo).getTodaysAppointments(clinic, start, end);
     }
 }
+

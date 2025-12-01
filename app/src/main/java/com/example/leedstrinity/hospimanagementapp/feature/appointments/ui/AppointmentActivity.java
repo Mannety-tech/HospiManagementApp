@@ -29,7 +29,7 @@ public class AppointmentActivity extends AppCompatActivity {
         biometric.authenticate(this, new BiometricLoginCoordinator.Callback() {
             @Override
             public void onSuccess() {
-                // ✅ Load fragment only if fresh launch
+                //  Load fragment only if fresh launch
                 if (savedInstanceState == null) {
                     getSupportFragmentManager()
                             .beginTransaction()

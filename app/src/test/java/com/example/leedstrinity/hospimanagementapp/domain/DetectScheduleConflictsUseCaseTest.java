@@ -24,7 +24,7 @@ public class DetectScheduleConflictsUseCaseTest {
 
         // Simulate overlapping appointments
         List<Appointment> overlaps = Arrays.asList(new Appointment());
-        when(repo.detectConflicts(1L, 1000L, 2000L)).thenReturn(overlaps);
+        when(repo.detectConflicts("Dr. Smith", 1000L, 2000L)).thenReturn(overlaps);
 
         DetectScheduleConflictsUseCase useCase = new DetectScheduleConflictsUseCase(mockContext) {
             {
@@ -32,9 +32,12 @@ public class DetectScheduleConflictsUseCaseTest {
             }
         };
 
-        boolean result = useCase.hasConflict(1L, 1000L, 2000L);
+        boolean result = useCase.hasConflict("Dr. Smith", 1000L, 2000L);
         assertTrue(result);
-        verify(repo).detectConflicts(1L, 1000L, 2000L);
+        verify(repo).detectConflicts("Dr. Smith", 1000L, 2000L);
     }
 }
+
+
+
 

@@ -5,11 +5,13 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/adminPortalRoot"
         android:orientation="vertical"
         android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- Toolbar -->
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -17,6 +19,23 @@
             android:background="?attr/colorPrimary"
             app:title="Admin Portal"
             app:titleTextColor="@android:color/white" />
+
+        <!-- Greeting Section -->
+        <TextView
+            android:id="@+id/tvWelcomeAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Welcome Admin"
+            android:textSize="20sp"
+            android:padding="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvAdminDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Admin details will appear here"
+            android:padding="8dp" />
 
         <!-- Staff Management Section -->
         <TextView
@@ -62,7 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <!-- Patient & Appointment Section (moved up) -->
+        <!-- Patient & Appointment Section -->
         <TextView
             android:text="Patient and Appointment Management"
             android:textStyle="bold"
@@ -87,7 +106,7 @@
 
             <Button
                 android:id="@+id/btnRegisterPatient"
-                android:text="Register patient"
+                android:text="Register Patient"
                 android:textSize="14sp"
                 android:padding="8dp"
                 android:layout_width="wrap_content"
@@ -110,7 +129,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <!-- Staff List Section (pushed down) -->
+        <!-- Staff List Section -->
         <TextView
             android:text="Registered Staff"
             android:textStyle="bold"
@@ -134,5 +153,6 @@
 
     </LinearLayout>
 </ScrollView>
+
 
 

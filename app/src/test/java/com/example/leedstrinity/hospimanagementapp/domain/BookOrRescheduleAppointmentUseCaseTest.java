@@ -1,6 +1,5 @@
 package com.example.leedstrinity.hospimanagementapp.domain;
 
-
 import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
 import com.example.leedstrinity.hospimanagementapp.data.repo.AppointmentRepository;
 
@@ -23,13 +22,23 @@ public class BookOrRescheduleAppointmentUseCaseTest {
 
     @Test
     public void testExecute_returnsBookedAppointment() throws Exception {
-        Appointment input = new Appointment("1234567890", 1000L, 2000L, 101L, "Dr. Smith", "Cardiology", "BOOKED");
+        // ✅ Use the constructor that matches your entity
+        Appointment input = new Appointment(
+                "John Doe",      // patientName
+                "2025-11-25",    // date
+                "10:00",         // time
+                "Checkup",       // reason
+                "Dr. Smith",     // doctorName
+                1000L,           // start
+                2000L,           // end
+                "BOOKED"         // status
+        );
 
         when(mockRepo.bookOrReschedule(input)).thenReturn(input);
 
         Appointment result = useCase.execute(input);
 
-        assertEquals("Dr. Smith", result.clinicianName);
+        assertEquals("Dr. Smith", result.doctorName);
         assertEquals("BOOKED", result.status);
         verify(mockRepo).bookOrReschedule(input);
     }

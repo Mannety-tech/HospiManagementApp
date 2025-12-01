@@ -2,30 +2,38 @@ package com.example.leedstrinity.hospimanagementapp.data.dao;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.leedstrinity.hospimanagementapp.data.entities.Vitals;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
 public interface VitalsDao {
 
-    @Insert
+    // Insert or replace if patientId already exists
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Vitals vitals);
 
     @Update
     void update(Vitals vitals);
 
-    @Query("SELECT * FROM vitals WHERE patientId = :patientId ORDER BY recordedAt DESC")
-    List<Vitals> findByPatient(long patientId);
+    // Get all vitals for a patient, newest first
+    @Query("SELECT * FROM vitals WHERE patient_id = :patientId ORDER BY recorded_at DESC")
+    List<Vitals> findByPatient(String patientId);
 
-    @Query("SELECT * FROM vitals WHERE recordedAt BETWEEN :start AND :end")
-    List<Vitals> findBetweenDates(long start, long end);
+    // Get vitals between two dates
+    @Query("SELECT * FROM vitals WHERE recorded_at BETWEEN :start AND :end ORDER BY recorded_at ASC")
+    List<Vitals> findBetweenDates(Date start, Date end);
 
-    @Query("SELECT * FROM vitals WHERE patientId = :patientId AND recordedAt = :timestamp LIMIT 1")
-    Vitals findSpecificRecord(long patientId, long timestamp);
+    // Get the latest vitals for a patient
+    @Query("SELECT * FROM vitals WHERE patient_id = :patientId ORDER BY recorded_at DESC LIMIT 1")
+    Vitals findLatestForPatient(String patientId);
 }
+
+
 
 

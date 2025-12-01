@@ -15,7 +15,7 @@ public class BookingFragment extends Fragment {
     public static BookingFragment newInstance(Appointment appointment) {
         BookingFragment fragment = new BookingFragment();
         Bundle args = new Bundle();
-        args.putLong(ARG_APPOINTMENT_ID, appointment.id); // using Room's public field
+        args.putLong(ARG_APPOINTMENT_ID, appointment.getId());
         fragment.setArguments(args);
         return fragment;
     }

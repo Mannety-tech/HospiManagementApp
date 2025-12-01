@@ -1,7 +1,7 @@
 package com.example.leedstrinity.hospimanagementapp.data.repo;
 
 
-import com.example.leedstrinity.hospimanagementapp.data.AppDatabase;
+import com.example.leedstrinity.hospimanagementapp.AppDatabase;
 import com.example.leedstrinity.hospimanagementapp.data.dao.AppointmentDao;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
 import com.example.leedstrinity.hospimanagementapp.network.dto.ApiClient;

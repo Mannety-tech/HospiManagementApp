@@ -67,6 +67,15 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:scrollbars="vertical"/>
+
+        <Button
+            android:id="@+id/backToMainButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back to Main"
+            android:layout_marginTop="16dp"/>
+
+
     </LinearLayout>
 </ScrollView>
 

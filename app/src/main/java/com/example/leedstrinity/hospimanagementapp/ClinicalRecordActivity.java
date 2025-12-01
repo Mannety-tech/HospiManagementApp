@@ -8,27 +8,31 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.leedstrinity.hospimanagementapp.feature.appointments.ui.AppointmentActivity;
-
 public class ClinicalRecordActivity extends AppCompatActivity {
 
-    private EditText patientNameEditText, diagnosisEditText, treatmentEditText, notesEditText;
+    // Form fields
+    private EditText patientNameEditText;
+    private EditText diagnosisEditText;
+    private EditText treatmentEditText;
+    private EditText notesEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clinical_records);
 
+        // Bind UI elements
         patientNameEditText = findViewById(R.id.editTextPatientName);
         diagnosisEditText = findViewById(R.id.editTextDiagnosis);
         treatmentEditText = findViewById(R.id.editTextTreatment);
         notesEditText = findViewById(R.id.editTextNotes);
 
         Button saveRecordButton = findViewById(R.id.buttonSaveRecord);
-        Button backButton = findViewById(R.id.buttonBackToAppointments);
+        Button viewVitalsButton = findViewById(R.id.buttonViewVitals);
         Button clinicianFormButton = findViewById(R.id.buttonClinicianForm);
         Button clinicianListButton = findViewById(R.id.buttonClinicianList);
 
+        // Save record logic
         saveRecordButton.setOnClickListener(v -> {
             String name = patientNameEditText.getText().toString().trim();
             String diagnosis = diagnosisEditText.getText().toString().trim();
@@ -45,21 +49,34 @@ public class ClinicalRecordActivity extends AppCompatActivity {
             }
         });
 
-        backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AppointmentActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        // Navigate to Vitals page
+        viewVitalsButton.setOnClickListener(v -> {
+            String patientId = patientNameEditText.getText().toString().trim();
+            // Replace with actual patientId from DB if available
+
+            Intent intent = new Intent(this, VitalsActivity.class);
+            intent.putExtra("patientId", patientId);
             startActivity(intent);
         });
 
+        // Open Clinician Form
         clinicianFormButton.setOnClickListener(v -> {
-            startActivity(new Intent(this, ClinicianFormActivity.class));
+            Intent intent = new Intent(this, ClinicianFormActivity.class);
+            startActivity(intent);
         });
 
+        // Open Clinician List
         clinicianListButton.setOnClickListener(v -> {
-            startActivity(new Intent(this, ClinicianListActivity.class));
+            Intent intent = new Intent(this, ClinicianListActivity.class);
+            startActivity(intent);
         });
     }
 }
+
+
+
+
+
 
 
 

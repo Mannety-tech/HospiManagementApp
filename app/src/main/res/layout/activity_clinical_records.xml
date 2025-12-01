@@ -61,8 +61,8 @@
             android:layout_marginTop="8dp">
 
             <Button
-                android:id="@+id/buttonBackToAppointments"
-                android:text="Appointments"
+                android:id="@+id/buttonViewVitals"
+                android:text="View Vitals"
                 android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -86,4 +86,5 @@
 
     </LinearLayout>
 </ScrollView>
+
 

@@ -18,11 +18,12 @@
             android:layout_height="wrap_content"
             android:text="Welcome to HospiManagementApp!" />
 
+
         <Button
-            android:id="@+id/btn_register"
+            android:id="@+id/btn_admin_portal"
             android:layout_width="340dp"
             android:layout_height="wrap_content"
-            android:text="Register Patient" />
+            android:text="Admin Portal" />
 
         <Button
             android:id="@+id/btn_admin_login"
@@ -31,10 +32,10 @@
             android:text="Admin Login" />
 
         <Button
-            android:id="@+id/btn_admin_portal"
+            android:id="@+id/btn_register"
             android:layout_width="340dp"
             android:layout_height="wrap_content"
-            android:text="Admin Portal" />
+            android:text="Register Patient" />
 
 
         <Button
@@ -54,6 +55,13 @@
             android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:text="Clinical Record" />
+
+        <Button
+            android:id="@+id/btn_patient_dashboard"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:text="Patient Dashboard" />
+
 
         <Button
             android:id="@+id/btn_biometric_auth"

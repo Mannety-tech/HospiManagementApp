@@ -1,9 +1,8 @@
 package com.example.leedstrinity.hospimanagementapp.data.repo;
 
-
 import android.content.Context;
 
-import com.example.leedstrinity.hospimanagementapp.data.AppDatabase;
+import com.example.leedstrinity.hospimanagementapp.AppDatabase;
 import com.example.leedstrinity.hospimanagementapp.data.dao.AppointmentDao;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
 import com.example.leedstrinity.hospimanagementapp.network.dto.ApiClient;
@@ -24,9 +23,13 @@ public class AppointmentRepository {
         this.api = new ApiClient(context);
     }
 
+    /**
+     * Fetch today's appointments from API, insert into local DB, and return appointments between start and end.
+     */
     public List<Appointment> getTodaysAppointments(String clinic, long start, long end) throws Exception {
-        // Fetch from mock network
-        Response<List<AppointmentDto>> response = api.appointmentApi().getTodaysAppointments(clinic).execute();
+        Response<List<AppointmentDto>> response =
+                api.appointmentApi().getTodaysAppointments(clinic).execute();
+
         List<Appointment> mapped = new ArrayList<>();
 
         if (response.isSuccessful() && response.body() != null) {
@@ -35,36 +38,38 @@ public class AppointmentRepository {
             }
         }
 
-        // Cache to DB (simplified: insert if none today)
+        // Insert into local DB
         for (Appointment appointment : mapped) {
             dao.insert(appointment);
         }
 
-        // Return from DB (source of truth)
         return dao.findBetween(start, end);
     }
 
+    /**
+     * Book or reschedule an appointment via API and update local DB.
+     */
     public Appointment bookOrReschedule(Appointment appt) throws Exception {
         AppointmentDto dto = new AppointmentDto();
-        dto.id = appt.id;
-        dto.patientNhsNumber = appt.patientNhsNumber;
-        dto.startTime = appt.startTime;
-        dto.endTime = appt.endTime;
-        dto.clinicianId = appt.clinicianId;
-        dto.clinicianName = appt.clinicianName;
-        dto.clinic = appt.clinic;
-        dto.status = "BOOKED";
+        dto.setId(appt.getId());
+        dto.setPatientNhsNumber(appt.getPatientNhsNumber());
+        dto.setStartTime(appt.getStart());
+        dto.setEndTime(appt.getEnd());
+        dto.setDoctorName(appt.getDoctorName());
+        dto.setStatus("BOOKED");
 
-        Response<AppointmentDto> response = api.appointmentApi().bookOrReschedule(dto).execute();
+        Response<AppointmentDto> response =
+                api.appointmentApi().bookOrReschedule(dto).execute();
 
         if (response.isSuccessful() && response.body() != null) {
             Appointment saved = map(response.body());
 
-            if (saved.id == 0) {
-                saved.id = appt.id; // Preserve local ID if mock returns 0
+            // Preserve ID if API didn’t return one
+            if (saved.getId() == 0) {
+                saved.setId(appt.getId());
             }
 
-            if (appt.id == 0) {
+            if (appt.getId() == 0) {
                 dao.insert(saved);
             } else {
                 dao.update(saved);
@@ -76,21 +81,39 @@ public class AppointmentRepository {
         }
     }
 
-    public List<Appointment> detectConflicts(long clinicianId, long start, long end) {
-        return dao.overlapping(clinicianId, start, end);
+    /**
+     * Detect overlapping appointments for a given doctor.
+     */
+    public List<Appointment> detectConflicts(String doctorName, long start, long end) {
+        return dao.overlappingByName(doctorName, start, end);
     }
 
+    /**
+     * Map AppointmentDto (from API) into Appointment entity (for Room).
+     */
     private Appointment map(AppointmentDto dto) {
         Appointment appointment = new Appointment();
-        appointment.id = dto.id;
-        appointment.patientNhsNumber = dto.patientNhsNumber;
-        appointment.startTime = dto.startTime;
-        appointment.endTime = dto.endTime;
-        appointment.clinicianId = dto.clinicianId;
-        appointment.clinicianName = dto.clinicianName;
-        appointment.clinic = dto.clinic;
-        appointment.status = dto.status;
+
+        appointment.setPatientNhsNumber(dto.getPatientNhsNumber());
+        appointment.setStart(dto.getStartTime());
+        appointment.setEnd(dto.getEndTime());
+        appointment.setDoctorName(dto.getDoctorName());
+        appointment.setStatus(dto.getStatus());
+
+        if (dto.getId() != 0) {
+            appointment.setId(dto.getId());
+        }
+
         return appointment;
     }
 }
+
+
+
+
+
+
+
+
+
 

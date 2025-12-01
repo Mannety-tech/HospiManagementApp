@@ -8,6 +8,45 @@
         <item>Reception</item>
     </string-array>
 
+
+        <!-- existing strings -->
+
+
+    <string-array name="specialties_array">
+        <item>Select specialty...</item>
+        <item>Cardiology</item>
+        <item>Dermatology</item>
+        <item>Neurology</item>
+        <item>Pediatrics</item>
+        <item>General Practice</item>
+    </string-array>
+
+
+
+    <!-- other strings -->
+        <string-array name="specialists_array">
+            <item>Dr. John Smith</item>
+            <item>Dr. Sarah Johnson</item>
+            <item>Dr. Michael Patel</item>
+            <item>Dr. Emily Williams</item>
+            <item>Dr. David Brown</item>
+        </string-array>
+
+    <string-array name="clinic_locations">
+        <item>North Clinic</item>
+        <item>South Clinic</item>
+        <item>East Clinic</item>
+        <item>West Clinic</item>
+    </string-array>
+
+
+
+
+
+
+
+
+
     <string name="app_name">HospiManagementApp</string>
 
     <!-- Add this -->

@@ -1,0 +1,86 @@
+package com.example.leedstrinity.hospimanagementapp.data.entities;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.Ignore;
+
+@Entity(tableName = "staff")
+public class Staff {
+
+    @PrimaryKey(autoGenerate = true)
+    private long id;   // ✅ changed from int to long
+
+    private String firstName;
+    private String lastName;
+    private String employeeNumber;
+    private String specialty;
+    private String role;
+    private String clinicLocation;
+    private String phone;
+    private String email;
+    private String password;
+
+    // --- Constructors ---
+    public Staff() {
+        // Room requires a no-arg constructor
+    }
+
+    @Ignore   // ✅ tell Room to ignore this constructor
+    public Staff(String firstName,
+                 String lastName,
+                 String employeeNumber,
+                 String specialty,
+                 String role,
+                 String clinicLocation,
+                 String phone,
+                 String email,
+                 String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.employeeNumber = employeeNumber;
+        this.specialty = specialty;
+        this.role = role;
+        this.clinicLocation = clinicLocation;
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
+    }
+
+    // --- Getters and setters ---
+    public long getId() { return id; }                 // ✅ updated to long
+    public void setId(long id) { this.id = id; }       // ✅ updated to long
+
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+
+    public String getLastName() { return lastName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
+
+    public String getEmployeeNumber() { return employeeNumber; }
+    public void setEmployeeNumber(String employeeNumber) { this.employeeNumber = employeeNumber; }
+
+    public String getSpecialty() { return specialty; }
+    public void setSpecialty(String specialty) { this.specialty = specialty; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
+
+    public String getClinicLocation() { return clinicLocation; }
+    public void setClinicLocation(String clinicLocation) { this.clinicLocation = clinicLocation; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+
+    public String getName() {
+        return firstName + " " + lastName;
+    }
+}
+
+
+

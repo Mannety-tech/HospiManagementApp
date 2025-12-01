@@ -18,9 +18,10 @@ DetectScheduleConflictsUseCase {
         this.repo = new AppointmentRepository(context);
     }
 
-    public boolean hasConflict(long clinicianId, long start, long end) {
-        List<Appointment> overlaps = repo.detectConflicts(clinicianId, start, end);
+    public boolean hasConflict(String doctorName, long start, long end) {
+        List<Appointment> overlaps = repo.detectConflicts(doctorName, start, end);
         return overlaps != null && !overlaps.isEmpty();
     }
+
 }
 

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.leedstrinity.hospimanagementapp.data.AppDatabase;
+import com.example.leedstrinity.hospimanagementapp.AppDatabase;
 import com.example.leedstrinity.hospimanagementapp.data.dao.ClinicianDao;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Clinician;
 import com.example.leedstrinity.hospimanagementapp.feature.appointments.ui.adapters.ClinicianAdapter;

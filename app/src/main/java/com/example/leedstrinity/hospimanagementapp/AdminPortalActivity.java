@@ -1,11 +1,13 @@
 package com.example.leedstrinity.hospimanagementapp;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,10 +25,36 @@ public class AdminPortalActivity extends AppCompatActivity {
     private Spinner patientSpinner;
     private Button registerPatientButton, bookAppointmentButton, viewAppointmentsButton, logoutButton;
 
+    // Greeting views
+    private TextView tvWelcomeAdmin, tvAdminDetails;
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_portal_login); // matches redesigned XML
+        setContentView(R.layout.activity_admin_portal);
+
+        // --- Greeting section ---
+        tvWelcomeAdmin = findViewById(R.id.tvWelcomeAdmin);
+        tvAdminDetails = findViewById(R.id.tvAdminDetails);
+
+        // ✅ Get staff extras passed from MainActivity
+        Intent intent = getIntent();
+        String staffName = intent.getStringExtra("staffName");
+        String staffEmail = intent.getStringExtra("staffEmail");
+        String empNo = intent.getStringExtra("employeeNumber");
+        String specialty = intent.getStringExtra("specialty");
+
+        if (staffName != null) {
+            tvWelcomeAdmin.setText("Welcome, " + staffName + " 👋");
+            tvAdminDetails.setText("Email: " + staffEmail +
+                    "\nEmployee No: " + empNo +
+                    "\nSpecialty: " + specialty);
+            Toast.makeText(this, "Admin portal loaded for " + staffName, Toast.LENGTH_SHORT).show();
+        } else {
+            tvWelcomeAdmin.setText("Welcome to Admin Portal");
+            tvAdminDetails.setText("No staff details found.");
+        }
 
         // --- Staff Management ---
         staffNameEditText = findViewById(R.id.etStaffName);
@@ -35,7 +63,6 @@ public class AdminPortalActivity extends AppCompatActivity {
         registerStaffButton = findViewById(R.id.btnRegisterStaff);
         staffRecyclerView = findViewById(R.id.rvStaff);
 
-        // Setup spinner with staff roles
         ArrayAdapter<CharSequence> roleAdapter = ArrayAdapter.createFromResource(
                 this,
                 R.array.staff_roles,
@@ -44,7 +71,6 @@ public class AdminPortalActivity extends AppCompatActivity {
         roleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         roleSpinner.setAdapter(roleAdapter);
 
-        // Register staff logic (no PIN required anymore)
         registerStaffButton.setOnClickListener(v -> {
             String name = staffNameEditText.getText().toString().trim();
             String email = staffEmailEditText.getText().toString().trim();
@@ -66,7 +92,6 @@ public class AdminPortalActivity extends AppCompatActivity {
         viewAppointmentsButton = findViewById(R.id.btnViewAppointments);
         logoutButton = findViewById(R.id.btnLogout);
 
-        // Example patient list (replace with DB query later)
         ArrayAdapter<String> patientAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
@@ -75,32 +100,28 @@ public class AdminPortalActivity extends AppCompatActivity {
         patientAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         patientSpinner.setAdapter(patientAdapter);
 
-        // Register patient
         registerPatientButton.setOnClickListener(v -> {
-            Toast.makeText(this, "Navigate to Register Patient screen", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, PatientRegistrationActivity.class));
         });
 
-        // Book appointment
         bookAppointmentButton.setOnClickListener(v -> {
             String selectedPatient = patientSpinner.getSelectedItem().toString();
             Toast.makeText(this, "Book appointment for " + selectedPatient, Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, BookAppointmentActivity.class));
         });
 
-        // View appointments
         viewAppointmentsButton.setOnClickListener(v -> {
             startActivity(new Intent(this, AppointmentListActivity.class));
         });
 
-        // Logout
         logoutButton.setOnClickListener(v -> {
-            Intent intent = new Intent(AdminPortalActivity.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
+            Intent backToMain = new Intent(AdminPortalActivity.this, MainActivity.class);
+            backToMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(backToMain);
             finish();
         });
     }
 }
+
 
 

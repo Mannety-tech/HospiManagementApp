@@ -1,8 +1,9 @@
 package com.example.leedstrinity.hospimanagementapp.network.dto;
 
 
-public class ClinicDto {
+public class SpecialistDto {
+    public long id;
     public String name;
-    public String location;
+    public String clinic;
 }
 
