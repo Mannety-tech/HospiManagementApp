@@ -1,27 +1,23 @@
 package com.example.leedstrinity.hospimanagementapp.domain;
 
-
-import android.content.Context;
+import androidx.lifecycle.LiveData;
 
 import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
 import com.example.leedstrinity.hospimanagementapp.data.repo.AppointmentRepository;
 
 import java.util.List;
 
-public class
-DetectScheduleConflictsUseCase {
+public class DetectScheduleConflictsUseCase {
 
-    protected AppointmentRepository repo;
+    private final AppointmentRepository repo;
 
-
-    public DetectScheduleConflictsUseCase(Context context) {
-        this.repo = new AppointmentRepository(context);
+    public DetectScheduleConflictsUseCase(AppointmentRepository repo) {
+        this.repo = repo;
     }
 
-    public boolean hasConflict(String doctorName, long start, long end) {
-        List<Appointment> overlaps = repo.detectConflicts(doctorName, start, end);
-        return overlaps != null && !overlaps.isEmpty();
+    public LiveData<List<Appointment>> execute(String specialistName, long start, long end) {
+        return repo.detectConflicts(specialistName, start, end);
     }
-
 }
+
 

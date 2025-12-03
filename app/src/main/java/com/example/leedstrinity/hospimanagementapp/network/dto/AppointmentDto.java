@@ -7,10 +7,11 @@ public class AppointmentDto {
     private String date;
     private String time;
     private String reason;
-    private String doctorName;
+    private String specialistName;   // corrected field name
     private String clinicLocation;
     private long startTime;
     private long endTime;
+    private String status;           // added workflow state
 
     // --- Constructors ---
     public AppointmentDto() { }
@@ -20,19 +21,21 @@ public class AppointmentDto {
                           String date,
                           String time,
                           String reason,
-                          String doctorName,
+                          String specialistName,
                           String clinicLocation,
                           long startTime,
-                          long endTime) {
+                          long endTime,
+                          String status) {
         this.id = id;
         this.patientName = patientName;
         this.date = date;
         this.time = time;
         this.reason = reason;
-        this.doctorName = doctorName;
+        this.specialistName = specialistName;
         this.clinicLocation = clinicLocation;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.status = status;
     }
 
     // --- Getters and setters ---
@@ -51,8 +54,8 @@ public class AppointmentDto {
     public String getReason() { return reason; }
     public void setReason(String reason) { this.reason = reason; }
 
-    public String getDoctorName() { return doctorName; }
-    public void setDoctorName(String doctorName) { this.doctorName = doctorName; }
+    public String getSpecialistName() { return specialistName; }
+    public void setSpecialistName(String specialistName) { this.specialistName = specialistName; }
 
     public String getClinicLocation() { return clinicLocation; }
     public void setClinicLocation(String clinicLocation) { this.clinicLocation = clinicLocation; }
@@ -62,7 +65,11 @@ public class AppointmentDto {
 
     public long getEndTime() { return endTime; }
     public void setEndTime(long endTime) { this.endTime = endTime; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }
+
 
 
 

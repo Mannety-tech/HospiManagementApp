@@ -38,7 +38,7 @@ public class BookOrRescheduleAppointmentUseCaseTest {
 
         Appointment result = useCase.execute(input);
 
-        assertEquals("Dr. Smith", result.doctorName);
+        assertEquals("Dr. Smith", result.getDoctorName());
         assertEquals("BOOKED", result.status);
         verify(mockRepo).bookOrReschedule(input);
     }

@@ -1,48 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <RecyclerView
+        android:id="@+id/recyclerViewVitals"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"/>
+</LinearLayout>
 
-
-        <TextView
-            android:id="@+id/tvTemperature"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Temperature: -- °C"
-            android:textSize="18sp"
-            android:padding="8dp" />
-
-        <TextView
-            android:id="@+id/tvBloodPressure"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Blood Pressure: --/-- mmHg"
-            android:textSize="18sp"
-            android:padding="8dp" />
-
-        <TextView
-            android:id="@+id/tvHeartRate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Heart Rate: -- bpm"
-            android:textSize="18sp"
-            android:padding="8dp" />
-
-
-
-        <TextView
-            android:id="@+id/tvRespiratoryRate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Respiratory Rate: -- breaths/min"
-            android:textSize="18sp"
-            android:padding="8dp" />
-
-    </LinearLayout>
-</ScrollView>

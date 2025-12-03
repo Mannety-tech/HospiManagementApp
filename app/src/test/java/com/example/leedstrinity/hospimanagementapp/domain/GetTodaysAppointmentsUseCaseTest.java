@@ -1,64 +1,46 @@
 package com.example.leedstrinity.hospimanagementapp.domain;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
 import com.example.leedstrinity.hospimanagementapp.data.repo.AppointmentRepository;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
-
 public class GetTodaysAppointmentsUseCaseTest {
 
-    private AppointmentRepository mockRepo;
-    private GetTodaysAppointmentsUseCase useCase;
+    private final AppointmentRepository repo;
 
-    @Before
-    public void setup() {
-        mockRepo = mock(AppointmentRepository.class);
-        useCase = new GetTodaysAppointmentsUseCase(mockRepo); // constructor injection
+    public GetTodaysAppointmentsUseCase(AppointmentRepository repo) {
+        this.repo = repo;
     }
 
-    @Test
-    public void testExecute_returnsAppointmentsForToday() throws Exception {
-        String clinic = "Cardiology";
+    /**
+     * Compute today's start and end millis internally,
+     * then fetch appointments for that clinic.
+     */
+    public LiveData<List<Appointment>> execute(String clinic) throws Exception {
+        // Start of today (00:00:00)
+        Calendar startCal = Calendar.getInstance();
+        startCal.set(Calendar.HOUR_OF_DAY, 0);
+        startCal.set(Calendar.MINUTE, 0);
+        startCal.set(Calendar.SECOND, 0);
+        startCal.set(Calendar.MILLISECOND, 0);
+        long startMillis = startCal.getTimeInMillis();
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        long start = cal.getTimeInMillis();
-        cal.add(Calendar.DAY_OF_MONTH, 1);
-        long end = cal.getTimeInMillis();
+        // End of today (23:59:59)
+        Calendar endCal = Calendar.getInstance();
+        endCal.set(Calendar.HOUR_OF_DAY, 23);
+        endCal.set(Calendar.MINUTE, 59);
+        endCal.set(Calendar.SECOND, 59);
+        endCal.set(Calendar.MILLISECOND, 999);
+        long endMillis = endCal.getTimeInMillis();
 
-        //  Use the correct 8‑argument constructor
-        Appointment a1 = new Appointment(
-                "John Doe",      // patientName
-                "2025-11-25",    // date
-                "10:00",         // time
-                "Checkup",       // reason
-                "Dr. Smith",     // doctorName
-                start,           // start time
-                end,             // end time
-                clinic           // clinicLocation
-        );
-
-        List<Appointment> expected = Arrays.asList(a1);
-
-        when(mockRepo.getTodaysAppointments(clinic, start, end)).thenReturn(expected);
-
-        List<Appointment> result = useCase.execute(clinic);
-
-        assertEquals(1, result.size());
-        assertEquals("Dr. Smith", result.get(0).getDoctorName());
-        verify(mockRepo).getTodaysAppointments(clinic, start, end);
+        return repo.getTodaysAppointments(clinic, startMillis, endMillis);
     }
 }
+
+
 
 

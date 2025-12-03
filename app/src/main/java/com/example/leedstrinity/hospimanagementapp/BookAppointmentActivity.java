@@ -15,14 +15,12 @@ import androidx.room.Room;
 
 import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executors;
 
 public class BookAppointmentActivity extends AppCompatActivity {
 
     private EditText patientNameEditText, dateEditText, timeEditText, reasonEditText;
-    private Spinner doctorSpinner, specialtySpinner, clinicSpinner;
+    private Spinner specialtySpinner, specialistSpinner, clinicSpinner;
     private AppDatabase db;
 
     @Override
@@ -33,90 +31,42 @@ public class BookAppointmentActivity extends AppCompatActivity {
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "hospital_db").build();
 
+        // --- Bind views ---
         patientNameEditText = findViewById(R.id.editTextPatientName);
         dateEditText = findViewById(R.id.editTextDate);
         timeEditText = findViewById(R.id.editTextTime);
         reasonEditText = findViewById(R.id.editTextReason);
-        doctorSpinner = findViewById(R.id.spinnerDoctorName);
         specialtySpinner = findViewById(R.id.spinnerSpecialty);
+        specialistSpinner = findViewById(R.id.spinnerSpecialist);
         clinicSpinner = findViewById(R.id.spinnerClinicLocation);
 
         Button submitAppointmentButton = findViewById(R.id.buttonSubmitAppointment);
         Button backToMainButton = findViewById(R.id.buttonBackToMain);
 
-        // --- Initialize with defaults from strings.xml ---
-        ArrayAdapter<CharSequence> defaultDoctorAdapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.specialists_array,
-                android.R.layout.simple_spinner_item
-        );
-        defaultDoctorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        doctorSpinner.setAdapter(defaultDoctorAdapter);
-
-        ArrayAdapter<CharSequence> defaultSpecialtyAdapter = ArrayAdapter.createFromResource(
+        // --- Set up adapters from strings.xml ---
+        ArrayAdapter<CharSequence> specialtyAdapter = ArrayAdapter.createFromResource(
                 this,
                 R.array.specialties_array,
                 android.R.layout.simple_spinner_item
         );
-        defaultSpecialtyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        specialtySpinner.setAdapter(defaultSpecialtyAdapter);
+        specialtyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        specialtySpinner.setAdapter(specialtyAdapter);
 
-        ArrayAdapter<CharSequence> defaultClinicAdapter = ArrayAdapter.createFromResource(
+        ArrayAdapter<CharSequence> specialistAdapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.specialists_array,
+                android.R.layout.simple_spinner_item
+        );
+        specialistAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        specialistSpinner.setAdapter(specialistAdapter);
+
+        ArrayAdapter<CharSequence> clinicAdapter = ArrayAdapter.createFromResource(
                 this,
                 R.array.clinic_locations,
                 android.R.layout.simple_spinner_item
         );
-        defaultClinicAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        clinicSpinner.setAdapter(defaultClinicAdapter);
-
-        // --- Override with DB values when available ---
-        db.staffDao().getAllSpecialtiesLive().observe(this, specialties -> {
-            if (specialties != null && !specialties.isEmpty()) {
-                List<String> merged = new ArrayList<>();
-                merged.add("Select specialty...");
-                merged.addAll(specialties);
-
-                ArrayAdapter<String> specialtyAdapter = new ArrayAdapter<>(
-                        BookAppointmentActivity.this,
-                        android.R.layout.simple_spinner_item,
-                        merged
-                );
-                specialtyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                specialtySpinner.setAdapter(specialtyAdapter);
-            }
-        });
-
-        db.staffDao().getAllSpecialistNamesLive().observe(this, specialistNames -> {
-            if (specialistNames != null && !specialistNames.isEmpty()) {
-                List<String> merged = new ArrayList<>();
-                merged.add("Select Doctor...");
-                merged.addAll(specialistNames);
-
-                ArrayAdapter<String> doctorAdapter = new ArrayAdapter<>(
-                        BookAppointmentActivity.this,
-                        android.R.layout.simple_spinner_item,
-                        merged
-                );
-                doctorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                doctorSpinner.setAdapter(doctorAdapter);
-            }
-        });
-
-        db.clinicDao().getAllClinicNamesLive().observe(this, clinicNames -> {
-            if (clinicNames != null && !clinicNames.isEmpty()) {
-                List<String> merged = new ArrayList<>();
-                merged.add("Select clinic...");
-                merged.addAll(clinicNames);
-
-                ArrayAdapter<String> clinicAdapter = new ArrayAdapter<>(
-                        BookAppointmentActivity.this,
-                        android.R.layout.simple_spinner_item,
-                        merged
-                );
-                clinicAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                clinicSpinner.setAdapter(clinicAdapter);
-            }
-        });
+        clinicAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        clinicSpinner.setAdapter(clinicAdapter);
 
         // --- Date picker ---
         dateEditText.setOnClickListener(v -> {
@@ -155,39 +105,50 @@ public class BookAppointmentActivity extends AppCompatActivity {
 
         // --- Submit appointment ---
         submitAppointmentButton.setOnClickListener(v -> {
-            String name = patientNameEditText.getText().toString().trim();
+            String patientName = patientNameEditText.getText().toString().trim();
             String date = dateEditText.getText().toString().trim();
             String time = timeEditText.getText().toString().trim();
             String reason = reasonEditText.getText().toString().trim();
-            String doctorName = doctorSpinner.getSelectedItem() != null
-                    ? doctorSpinner.getSelectedItem().toString()
-                    : "";
             String specialty = specialtySpinner.getSelectedItem() != null
                     ? specialtySpinner.getSelectedItem().toString()
+                    : "";
+            String specialistName = specialistSpinner.getSelectedItem() != null
+                    ? specialistSpinner.getSelectedItem().toString()
                     : "";
             String clinicLocation = clinicSpinner.getSelectedItem() != null
                     ? clinicSpinner.getSelectedItem().toString()
                     : "";
 
-            if (doctorName.equals("Select Doctor...") || specialty.equals("Select specialty...") || clinicLocation.equals("Select clinic...")) {
-                Toast.makeText(this, "Please select valid doctor, specialty, and clinic", Toast.LENGTH_SHORT).show();
+            if (specialty.equals("Select specialty...") ||
+                    specialistName.equals("Select specialist...") ||
+                    clinicLocation.equals("Select clinic...")) {
+                Toast.makeText(this, "Please select valid specialty, specialist, and clinic", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (name.isEmpty() || date.isEmpty() || time.isEmpty() || reason.isEmpty()) {
+            if (patientName.isEmpty() || date.isEmpty() || time.isEmpty() || reason.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             } else {
                 long start = System.currentTimeMillis();
                 long end = start + 3600000; // 1 hour later
 
                 Appointment appointment = new Appointment(
-                        name, date, time, reason, doctorName, start, end, clinicLocation
+                        patientName,
+                        date,
+                        time,
+                        reason,
+                        specialistName,
+                        start,
+                        end,
+                        clinicLocation,
+                        "BOOKED"
                 );
 
                 Executors.newSingleThreadExecutor().execute(() -> {
                     db.appointmentDao().insert(appointment);
                     runOnUiThread(() -> Toast.makeText(this,
-                            "Appointment saved for " + name + " with " + doctorName +
+                            "Appointment saved for " + patientName +
+                                    " with " + specialistName +
                                     " (" + specialty + ") at " + clinicLocation,
                             Toast.LENGTH_LONG).show());
                 });
@@ -202,6 +163,10 @@ public class BookAppointmentActivity extends AppCompatActivity {
         });
     }
 }
+
+
+
+
 
 
 

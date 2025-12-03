@@ -2,6 +2,8 @@ package com.example.leedstrinity.hospimanagementapp.data.repo;
 
 import android.content.Context;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.leedstrinity.hospimanagementapp.AppDatabase;
 import com.example.leedstrinity.hospimanagementapp.data.dao.AppointmentDao;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
@@ -26,7 +28,7 @@ public class AppointmentRepository {
     /**
      * Fetch today's appointments from API, insert into local DB, and return appointments between start and end.
      */
-    public List<Appointment> getTodaysAppointments(String clinic, long start, long end) throws Exception {
+    public LiveData<List<Appointment>> getTodaysAppointments(String clinic, long start, long end) throws Exception {
         Response<List<AppointmentDto>> response =
                 api.appointmentApi().getTodaysAppointments(clinic).execute();
 
@@ -43,6 +45,7 @@ public class AppointmentRepository {
             dao.insert(appointment);
         }
 
+        // Return reactive query
         return dao.findBetween(start, end);
     }
 
@@ -56,10 +59,11 @@ public class AppointmentRepository {
         dto.setDate(appt.getDate());
         dto.setTime(appt.getTime());
         dto.setReason(appt.getReason());
-        dto.setDoctorName(appt.getDoctorName());
+        dto.setSpecialistName(appt.getSpecialistName());
         dto.setClinicLocation(appt.getClinicLocation());
         dto.setStartTime(appt.getStartTimeMillis());
         dto.setEndTime(appt.getEndTimeMillis());
+        dto.setStatus(appt.getStatus());
 
         Response<AppointmentDto> response =
                 api.appointmentApi().bookOrReschedule(dto).execute();
@@ -85,10 +89,10 @@ public class AppointmentRepository {
     }
 
     /**
-     * Detect overlapping appointments for a given doctor.
+     * Detect overlapping appointments for a given specialist.
      */
-    public List<Appointment> detectConflicts(String doctorName, long start, long end) {
-        return dao.overlappingByName(doctorName, start, end);
+    public LiveData<List<Appointment>> detectConflicts(String specialistName, long start, long end) {
+        return dao.overlappingByName(specialistName, start, end);
     }
 
     /**
@@ -101,10 +105,11 @@ public class AppointmentRepository {
         appointment.setDate(dto.getDate());
         appointment.setTime(dto.getTime());
         appointment.setReason(dto.getReason());
-        appointment.setDoctorName(dto.getDoctorName());
+        appointment.setSpecialistName(dto.getSpecialistName());
         appointment.setClinicLocation(dto.getClinicLocation());
         appointment.setStartTimeMillis(dto.getStartTime());
         appointment.setEndTimeMillis(dto.getEndTime());
+        appointment.setStatus(dto.getStatus());
 
         if (dto.getId() != 0) {
             appointment.setId(dto.getId());
@@ -113,6 +118,10 @@ public class AppointmentRepository {
         return appointment;
     }
 }
+
+
+
+
 
 
 

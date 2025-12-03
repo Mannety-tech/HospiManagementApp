@@ -1,7 +1,6 @@
-
 package com.example.leedstrinity.hospimanagementapp.domain;
 
-import android.content.Context;
+import androidx.lifecycle.LiveData;
 
 import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
 import com.example.leedstrinity.hospimanagementapp.data.repo.AppointmentRepository;
@@ -13,27 +12,34 @@ public class GetTodaysAppointmentsUseCase {
 
     private final AppointmentRepository repo;
 
-    //  Original constructor for production use
-    public GetTodaysAppointmentsUseCase(Context context) {
-        this.repo = new AppointmentRepository(context);
-    }
-
-    //  New constructor for testing (mock injection)
     public GetTodaysAppointmentsUseCase(AppointmentRepository repo) {
         this.repo = repo;
     }
 
-    public List<Appointment> execute(String clinic) throws Exception {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        long start = cal.getTimeInMillis();
-        cal.add(Calendar.DAY_OF_MONTH, 1);
-        long end = cal.getTimeInMillis();
-        return repo.getTodaysAppointments(clinic, start, end);
+    /**
+     * Compute today's start and end millis internally,
+     * then fetch appointments for that clinic.
+     */
+    public LiveData<List<Appointment>> execute(String clinic) throws Exception {
+        // Start of today (00:00:00)
+        Calendar startCal = Calendar.getInstance();
+        startCal.set(Calendar.HOUR_OF_DAY, 0);
+        startCal.set(Calendar.MINUTE, 0);
+        startCal.set(Calendar.SECOND, 0);
+        startCal.set(Calendar.MILLISECOND, 0);
+        long startMillis = startCal.getTimeInMillis();
+
+        // End of today (23:59:59)
+        Calendar endCal = Calendar.getInstance();
+        endCal.set(Calendar.HOUR_OF_DAY, 23);
+        endCal.set(Calendar.MINUTE, 59);
+        endCal.set(Calendar.SECOND, 59);
+        endCal.set(Calendar.MILLISECOND, 999);
+        long endMillis = endCal.getTimeInMillis();
+
+        return repo.getTodaysAppointments(clinic, startMillis, endMillis);
     }
 }
+
 
 
