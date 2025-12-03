@@ -52,11 +52,14 @@ public class AppointmentRepository {
     public Appointment bookOrReschedule(Appointment appt) throws Exception {
         AppointmentDto dto = new AppointmentDto();
         dto.setId(appt.getId());
-        dto.setPatientNhsNumber(appt.getPatientNhsNumber());
-        dto.setStartTime(appt.getStart());
-        dto.setEndTime(appt.getEnd());
+        dto.setPatientName(appt.getPatientName());
+        dto.setDate(appt.getDate());
+        dto.setTime(appt.getTime());
+        dto.setReason(appt.getReason());
         dto.setDoctorName(appt.getDoctorName());
-        dto.setStatus("BOOKED");
+        dto.setClinicLocation(appt.getClinicLocation());
+        dto.setStartTime(appt.getStartTimeMillis());
+        dto.setEndTime(appt.getEndTimeMillis());
 
         Response<AppointmentDto> response =
                 api.appointmentApi().bookOrReschedule(dto).execute();
@@ -94,11 +97,14 @@ public class AppointmentRepository {
     private Appointment map(AppointmentDto dto) {
         Appointment appointment = new Appointment();
 
-        appointment.setPatientNhsNumber(dto.getPatientNhsNumber());
-        appointment.setStart(dto.getStartTime());
-        appointment.setEnd(dto.getEndTime());
+        appointment.setPatientName(dto.getPatientName());
+        appointment.setDate(dto.getDate());
+        appointment.setTime(dto.getTime());
+        appointment.setReason(dto.getReason());
         appointment.setDoctorName(dto.getDoctorName());
-        appointment.setStatus(dto.getStatus());
+        appointment.setClinicLocation(dto.getClinicLocation());
+        appointment.setStartTimeMillis(dto.getStartTime());
+        appointment.setEndTimeMillis(dto.getEndTime());
 
         if (dto.getId() != 0) {
             appointment.setId(dto.getId());
@@ -107,6 +113,7 @@ public class AppointmentRepository {
         return appointment;
     }
 }
+
 
 
 

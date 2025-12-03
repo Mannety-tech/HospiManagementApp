@@ -13,34 +13,36 @@ public class Vitals {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    public long id;
+    private long id;
 
     @NonNull
     @ColumnInfo(name = "patient_id")
-    public String patientId;
+    private String patientId;
 
     @ColumnInfo(name = "heart_rate_bpm")
-    public int heartRate;
+    private int heartRate;
 
     @ColumnInfo(name = "blood_pressure_systolic")
-    public int systolicBP;
+    private int systolicBP;
 
     @ColumnInfo(name = "blood_pressure_diastolic")
-    public int diastolicBP;
+    private int diastolicBP;
 
     @ColumnInfo(name = "temperature_celsius")
-    public double temperature;
+    private double temperature;
 
     @ColumnInfo(name = "respiratory_rate_bpm")
-    public int respiratoryRate;
+    private int respiratoryRate;
 
     @ColumnInfo(name = "recorded_at")
-    public Date recordedAt;
+    private Date recordedAt;
 
-    // Default constructor for Room
-    public Vitals() {}
+    // --- Required no-arg constructor for Room ---
+    public Vitals() {
+        this.recordedAt = new Date(); // default timestamp
+    }
 
-    // Full constructor (explicit timestamp)
+    // --- Full constructor (explicit timestamp) ---
     @Ignore
     public Vitals(@NonNull String patientId,
                   int heartRate,
@@ -58,7 +60,7 @@ public class Vitals {
         this.recordedAt = recordedAt;
     }
 
-    // Convenience constructor (auto timestamp)
+    // --- Convenience constructor (auto timestamp) ---
     @Ignore
     public Vitals(@NonNull String patientId,
                   int heartRate,
@@ -68,7 +70,34 @@ public class Vitals {
                   int respiratoryRate) {
         this(patientId, heartRate, systolicBP, diastolicBP, temperature, respiratoryRate, new Date());
     }
+
+    // --- Getters and setters ---
+    public long getId() { return id; }
+    public void setId(long id) { this.id = id; }
+
+    @NonNull
+    public String getPatientId() { return patientId; }
+    public void setPatientId(@NonNull String patientId) { this.patientId = patientId; }
+
+    public int getHeartRate() { return heartRate; }
+    public void setHeartRate(int heartRate) { this.heartRate = heartRate; }
+
+    public int getSystolicBP() { return systolicBP; }
+    public void setSystolicBP(int systolicBP) { this.systolicBP = systolicBP; }
+
+    public int getDiastolicBP() { return diastolicBP; }
+    public void setDiastolicBP(int diastolicBP) { this.diastolicBP = diastolicBP; }
+
+    public double getTemperature() { return temperature; }
+    public void setTemperature(double temperature) { this.temperature = temperature; }
+
+    public int getRespiratoryRate() { return respiratoryRate; }
+    public void setRespiratoryRate(int respiratoryRate) { this.respiratoryRate = respiratoryRate; }
+
+    public Date getRecordedAt() { return recordedAt; }
+    public void setRecordedAt(Date recordedAt) { this.recordedAt = recordedAt; }
 }
+
 
 
 

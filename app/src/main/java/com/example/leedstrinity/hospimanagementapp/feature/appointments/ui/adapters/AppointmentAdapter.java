@@ -55,7 +55,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         }
 
         public void bind(Appointment appointment, OnItemClickListener listener) {
-            tvPatientName.setText(appointment.getPatientNhsNumber());
+            tvPatientName.setText(appointment.getPatientName());
 
 
             itemView.setOnClickListener(v -> listener.onItemClick(appointment));

@@ -1,5 +1,3 @@
-
-
 package com.example.leedstrinity.hospimanagementapp.domain;
 
 import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
@@ -39,7 +37,7 @@ public class GetTodaysAppointmentsUseCaseTest {
         cal.add(Calendar.DAY_OF_MONTH, 1);
         long end = cal.getTimeInMillis();
 
-        // ✅ Use the correct constructor
+        //  Use the correct 8‑argument constructor
         Appointment a1 = new Appointment(
                 "John Doe",      // patientName
                 "2025-11-25",    // date
@@ -47,7 +45,8 @@ public class GetTodaysAppointmentsUseCaseTest {
                 "Checkup",       // reason
                 "Dr. Smith",     // doctorName
                 start,           // start time
-                end              // end time
+                end,             // end time
+                clinic           // clinicLocation
         );
 
         List<Appointment> expected = Arrays.asList(a1);
@@ -57,8 +56,9 @@ public class GetTodaysAppointmentsUseCaseTest {
         List<Appointment> result = useCase.execute(clinic);
 
         assertEquals(1, result.size());
-        assertEquals("Dr. Smith", result.get(0).doctorName);
+        assertEquals("Dr. Smith", result.get(0).getDoctorName());
         verify(mockRepo).getTodaysAppointments(clinic, start, end);
     }
 }
+
 

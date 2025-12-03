@@ -8,7 +8,7 @@ import androidx.room.Ignore;
 public class Staff {
 
     @PrimaryKey(autoGenerate = true)
-    private long id;   // ✅ changed from int to long
+    private long id;
 
     private String firstName;
     private String lastName;
@@ -25,7 +25,7 @@ public class Staff {
         // Room requires a no-arg constructor
     }
 
-    @Ignore   // ✅ tell Room to ignore this constructor
+    @Ignore   //  tell Room to ignore this constructor
     public Staff(String firstName,
                  String lastName,
                  String employeeNumber,

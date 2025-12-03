@@ -9,6 +9,7 @@ import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okio.Buffer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,8 +17,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 /**
- * MockInterceptor simulates API responses by serving JSON from assets.
- * Useful for offline development, testing, and UI prototyping.
+ * MockInterceptor simulates API responses by serving JSON from assets
+ * or echoing request bodies for testing.
  */
 public class MockInterceptor implements Interceptor {
 
@@ -38,12 +39,19 @@ public class MockInterceptor implements Interceptor {
             // --- Match endpoints ---
             if (path.endsWith("/appointments/today")) {
                 jsonResponse = readAsset("mock/appointments_today.json");
+
             } else if (path.endsWith("/appointments/bookOrReschedule")) {
-                jsonResponse = readAsset("mock/booking_success.json");
+                //  Echo back the request body
+                final Buffer buffer = new Buffer();
+                request.body().writeTo(buffer);
+                jsonResponse = buffer.readUtf8();
+
             } else if (path.endsWith("/staff/login")) {
                 jsonResponse = readAsset("mock/staff_login.json");
+
             } else if (path.endsWith("/patients/login")) {
                 jsonResponse = readAsset("mock/patient_login.json");
+
             } else {
                 Log.w(TAG, "No mock found for path: " + path);
                 jsonResponse = "{\"error\":\"no mock available\"}";
@@ -72,7 +80,6 @@ public class MockInterceptor implements Interceptor {
         }
     }
 
-
     private String readAsset(String assetPath) throws IOException {
         StringBuilder builder = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(
@@ -80,11 +87,12 @@ public class MockInterceptor implements Interceptor {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                builder.append(line).append('\n'); // buffer with line breaks
+                builder.append(line).append('\n');
             }
         }
         return builder.toString();
     }
 }
+
 
 

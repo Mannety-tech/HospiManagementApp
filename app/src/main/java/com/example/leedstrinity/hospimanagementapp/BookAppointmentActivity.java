@@ -15,13 +15,14 @@ import androidx.room.Room;
 
 import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 
 public class BookAppointmentActivity extends AppCompatActivity {
 
     private EditText patientNameEditText, dateEditText, timeEditText, reasonEditText;
-    private Spinner specialtySpinner, doctorSpinner, clinicSpinner;
+    private Spinner doctorSpinner, specialtySpinner, clinicSpinner;
     private AppDatabase db;
 
     @Override
@@ -29,7 +30,6 @@ public class BookAppointmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_appointment);
 
-        // Room DB instance
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "hospital_db").build();
 
@@ -37,75 +37,88 @@ public class BookAppointmentActivity extends AppCompatActivity {
         dateEditText = findViewById(R.id.editTextDate);
         timeEditText = findViewById(R.id.editTextTime);
         reasonEditText = findViewById(R.id.editTextReason);
-        specialtySpinner = findViewById(R.id.spinnerSpecialty);
         doctorSpinner = findViewById(R.id.spinnerDoctorName);
+        specialtySpinner = findViewById(R.id.spinnerSpecialty);
         clinicSpinner = findViewById(R.id.spinnerClinicLocation);
 
         Button submitAppointmentButton = findViewById(R.id.buttonSubmitAppointment);
         Button backToMainButton = findViewById(R.id.buttonBackToMain);
 
-        // ✅ Observe specialties dynamically from Staff table
+        // --- Initialize with defaults from strings.xml ---
+        ArrayAdapter<CharSequence> defaultDoctorAdapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.specialists_array,
+                android.R.layout.simple_spinner_item
+        );
+        defaultDoctorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        doctorSpinner.setAdapter(defaultDoctorAdapter);
+
+        ArrayAdapter<CharSequence> defaultSpecialtyAdapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.specialties_array,
+                android.R.layout.simple_spinner_item
+        );
+        defaultSpecialtyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        specialtySpinner.setAdapter(defaultSpecialtyAdapter);
+
+        ArrayAdapter<CharSequence> defaultClinicAdapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.clinic_locations,
+                android.R.layout.simple_spinner_item
+        );
+        defaultClinicAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        clinicSpinner.setAdapter(defaultClinicAdapter);
+
+        // --- Override with DB values when available ---
         db.staffDao().getAllSpecialtiesLive().observe(this, specialties -> {
-            ArrayAdapter<String> specialtyAdapter = new ArrayAdapter<>(
-                    BookAppointmentActivity.this,
-                    android.R.layout.simple_spinner_item,
-                    specialties
-            );
-            specialtyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            specialtySpinner.setAdapter(specialtyAdapter);
-        });
+            if (specialties != null && !specialties.isEmpty()) {
+                List<String> merged = new ArrayList<>();
+                merged.add("Select specialty...");
+                merged.addAll(specialties);
 
-        // ✅ Observe all specialist names (if you want a direct list without filtering)
-        db.staffDao().getAllSpecialistNamesLive().observe(this, specialistNames -> {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                    BookAppointmentActivity.this,
-                    android.R.layout.simple_spinner_item,
-                    specialistNames
-            );
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            doctorSpinner.setAdapter(adapter);
-        });
-
-        // ✅ When specialty changes, update doctor list
-        specialtySpinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(android.widget.AdapterView<?> parent, android.view.View view, int position, long id) {
-                String selectedSpecialty = specialtySpinner.getSelectedItem().toString();
-
-                db.staffDao().getDoctorNamesBySpecialty(selectedSpecialty).observe(BookAppointmentActivity.this, doctorNames -> {
-                    List<String> displayList = (doctorNames == null || doctorNames.isEmpty())
-                            ? java.util.Collections.singletonList("No doctors available")
-                            : doctorNames;
-
-                    ArrayAdapter<String> doctorAdapter = new ArrayAdapter<>(
-                            BookAppointmentActivity.this,
-                            android.R.layout.simple_spinner_item,
-                            displayList
-                    );
-                    doctorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    doctorSpinner.setAdapter(doctorAdapter);
-
-                    // Disable submit if no doctors
-                    submitAppointmentButton.setEnabled(!(doctorNames == null || doctorNames.isEmpty()));
-                });
+                ArrayAdapter<String> specialtyAdapter = new ArrayAdapter<>(
+                        BookAppointmentActivity.this,
+                        android.R.layout.simple_spinner_item,
+                        merged
+                );
+                specialtyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                specialtySpinner.setAdapter(specialtyAdapter);
             }
-
-            @Override
-            public void onNothingSelected(android.widget.AdapterView<?> parent) { }
         });
 
-        // ✅ Observe clinic locations dynamically
+        db.staffDao().getAllSpecialistNamesLive().observe(this, specialistNames -> {
+            if (specialistNames != null && !specialistNames.isEmpty()) {
+                List<String> merged = new ArrayList<>();
+                merged.add("Select Doctor...");
+                merged.addAll(specialistNames);
+
+                ArrayAdapter<String> doctorAdapter = new ArrayAdapter<>(
+                        BookAppointmentActivity.this,
+                        android.R.layout.simple_spinner_item,
+                        merged
+                );
+                doctorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                doctorSpinner.setAdapter(doctorAdapter);
+            }
+        });
+
         db.clinicDao().getAllClinicNamesLive().observe(this, clinicNames -> {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                    BookAppointmentActivity.this,
-                    android.R.layout.simple_spinner_item,
-                    clinicNames
-            );
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            clinicSpinner.setAdapter(adapter);
+            if (clinicNames != null && !clinicNames.isEmpty()) {
+                List<String> merged = new ArrayList<>();
+                merged.add("Select clinic...");
+                merged.addAll(clinicNames);
+
+                ArrayAdapter<String> clinicAdapter = new ArrayAdapter<>(
+                        BookAppointmentActivity.this,
+                        android.R.layout.simple_spinner_item,
+                        merged
+                );
+                clinicAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                clinicSpinner.setAdapter(clinicAdapter);
+            }
         });
 
-        // Date picker
+        // --- Date picker ---
         dateEditText.setOnClickListener(v -> {
             final java.util.Calendar calendar = java.util.Calendar.getInstance();
             int year = calendar.get(java.util.Calendar.YEAR);
@@ -123,7 +136,7 @@ public class BookAppointmentActivity extends AppCompatActivity {
             datePickerDialog.show();
         });
 
-        // Time picker
+        // --- Time picker ---
         timeEditText.setOnClickListener(v -> {
             final java.util.Calendar calendar = java.util.Calendar.getInstance();
             int hour = calendar.get(java.util.Calendar.HOUR_OF_DAY);
@@ -140,7 +153,7 @@ public class BookAppointmentActivity extends AppCompatActivity {
             timePickerDialog.show();
         });
 
-        // Submit Button
+        // --- Submit appointment ---
         submitAppointmentButton.setOnClickListener(v -> {
             String name = patientNameEditText.getText().toString().trim();
             String date = dateEditText.getText().toString().trim();
@@ -156,31 +169,32 @@ public class BookAppointmentActivity extends AppCompatActivity {
                     ? clinicSpinner.getSelectedItem().toString()
                     : "";
 
-            if (doctorName.equals("No doctors available")) {
-                Toast.makeText(this, "Please choose a specialty with available doctors", Toast.LENGTH_SHORT).show();
+            if (doctorName.equals("Select Doctor...") || specialty.equals("Select specialty...") || clinicLocation.equals("Select clinic...")) {
+                Toast.makeText(this, "Please select valid doctor, specialty, and clinic", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (name.isEmpty() || date.isEmpty() || time.isEmpty() || reason.isEmpty()
-                    || doctorName.isEmpty() || specialty.isEmpty() || clinicLocation.isEmpty()) {
+            if (name.isEmpty() || date.isEmpty() || time.isEmpty() || reason.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             } else {
                 long start = System.currentTimeMillis();
                 long end = start + 3600000; // 1 hour later
 
-                // ⚠️ Make sure Appointment entity has a clinicLocation field
-                Appointment appointment = new Appointment(name, date, time, reason, doctorName, start, end, clinicLocation);
+                Appointment appointment = new Appointment(
+                        name, date, time, reason, doctorName, start, end, clinicLocation
+                );
 
                 Executors.newSingleThreadExecutor().execute(() -> {
                     db.appointmentDao().insert(appointment);
                     runOnUiThread(() -> Toast.makeText(this,
-                            "Appointment saved for " + name + " with " + doctorName + " (" + specialty + ") at " + clinicLocation,
+                            "Appointment saved for " + name + " with " + doctorName +
+                                    " (" + specialty + ") at " + clinicLocation,
                             Toast.LENGTH_LONG).show());
                 });
             }
         });
 
-        // Back Button
+        // --- Back button ---
         backToMainButton.setOnClickListener(v -> {
             Intent intent = new Intent(BookAppointmentActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -188,6 +202,8 @@ public class BookAppointmentActivity extends AppCompatActivity {
         });
     }
 }
+
+
 
 
 

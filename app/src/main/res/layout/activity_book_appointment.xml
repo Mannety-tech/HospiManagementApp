@@ -7,7 +7,8 @@
     <!-- 📋 Scrollable appointment form -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:padding="24dp">
 
         <LinearLayout
@@ -57,36 +58,31 @@
                 android:inputType="text"
                 android:layout_marginBottom="24dp" />
 
-            <EditText
-                android:id="@+id/editTextDoctorName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Doctor Name"
-                android:inputType="textPersonName"
-                android:layout_margin="16dp"/>
-
+            <!-- Doctor selection -->
             <Spinner
                 android:id="@+id/spinnerDoctorName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:entries="@array/specialists_array" />
+                android:entries="@array/specialists_array"
+                android:layout_marginBottom="16dp" />
 
-
+            <!-- Specialty selection -->
             <Spinner
                 android:id="@+id/spinnerSpecialty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dropdown" />
+                android:spinnerMode="dropdown"
+                android:layout_marginBottom="16dp" />
 
+            <!-- Clinic selection -->
             <Spinner
                 android:id="@+id/spinnerClinicLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:entries="@array/clinic_locations" />
+                android:entries="@array/clinic_locations"
+                android:layout_marginBottom="24dp" />
 
-
-
+            <!-- Buttons -->
             <Button
                 android:id="@+id/buttonSubmitAppointment"
                 android:layout_width="match_parent"
@@ -98,7 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Back to Main Page"
-                android:layout_marginTop="24dp" />
+                android:layout_marginTop="16dp" />
 
         </LinearLayout>
     </ScrollView>
@@ -110,6 +106,7 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 </LinearLayout>
+
 
 
 

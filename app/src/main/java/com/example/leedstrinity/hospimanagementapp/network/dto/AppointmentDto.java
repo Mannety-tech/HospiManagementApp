@@ -3,63 +3,67 @@ package com.example.leedstrinity.hospimanagementapp.network.dto;
 public class AppointmentDto {
 
     private long id;
-    private String patientNhsNumber;
+    private String patientName;
+    private String date;
+    private String time;
+    private String reason;
+    private String doctorName;
+    private String clinicLocation;
     private long startTime;
     private long endTime;
-    private String doctorName;
-    private String clinic;
-    private String status;
 
-    // --- Getters and Setters ---
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
+    // --- Constructors ---
+    public AppointmentDto() { }
+
+    public AppointmentDto(long id,
+                          String patientName,
+                          String date,
+                          String time,
+                          String reason,
+                          String doctorName,
+                          String clinicLocation,
+                          long startTime,
+                          long endTime) {
         this.id = id;
-    }
-
-    public String getPatientNhsNumber() {
-        return patientNhsNumber;
-    }
-    public void setPatientNhsNumber(String patientNhsNumber) {
-        this.patientNhsNumber = patientNhsNumber;
-    }
-
-    public long getStartTime() {
-        return startTime;
-    }
-    public void setStartTime(long startTime) {
+        this.patientName = patientName;
+        this.date = date;
+        this.time = time;
+        this.reason = reason;
+        this.doctorName = doctorName;
+        this.clinicLocation = clinicLocation;
         this.startTime = startTime;
-    }
-
-    public long getEndTime() {
-        return endTime;
-    }
-    public void setEndTime(long endTime) {
         this.endTime = endTime;
     }
 
-    public String getDoctorName() {
-        return doctorName;
-    }
-    public void setDoctorName(String doctorName) {
-        this.doctorName = doctorName;
-    }
+    // --- Getters and setters ---
+    public long getId() { return id; }
+    public void setId(long id) { this.id = id; }
 
-    public String getClinic() {
-        return clinic;
-    }
-    public void setClinic(String clinic) {
-        this.clinic = clinic;
-    }
+    public String getPatientName() { return patientName; }
+    public void setPatientName(String patientName) { this.patientName = patientName; }
 
-    public String getStatus() {
-        return status;
-    }
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    public String getDate() { return date; }
+    public void setDate(String date) { this.date = date; }
+
+    public String getTime() { return time; }
+    public void setTime(String time) { this.time = time; }
+
+    public String getReason() { return reason; }
+    public void setReason(String reason) { this.reason = reason; }
+
+    public String getDoctorName() { return doctorName; }
+    public void setDoctorName(String doctorName) { this.doctorName = doctorName; }
+
+    public String getClinicLocation() { return clinicLocation; }
+    public void setClinicLocation(String clinicLocation) { this.clinicLocation = clinicLocation; }
+
+    public long getStartTime() { return startTime; }
+    public void setStartTime(long startTime) { this.startTime = startTime; }
+
+    public long getEndTime() { return endTime; }
+    public void setEndTime(long endTime) { this.endTime = endTime; }
 }
+
 
 
 

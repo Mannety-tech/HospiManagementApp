@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.example.leedstrinity.hospimanagementapp.AppDatabase;
-import com.example.leedstrinity.hospimanagementapp.data.dao.VitalsDao;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Vitals;
+import com.example.leedstrinity.hospimanagementapp.feature.appointments.ui.VitalsViewModel;
 import com.example.leedstrinity.hospimanagementapp.network.dto.RetrofitClient;
 import com.example.leedstrinity.hospimanagementapp.network.dto.VitalsApi;
 
@@ -19,7 +19,7 @@ public class VitalsActivity extends AppCompatActivity {
 
     private TextView tvHeartRate, tvBloodPressure, tvTemperature, tvRespiratoryRate;
     private String patientId;
-    private VitalsDao vitalsDao;
+    private VitalsViewModel vitalsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +35,21 @@ public class VitalsActivity extends AppCompatActivity {
         // --- Get patientId from Intent ---
         patientId = getIntent().getStringExtra("patientId");
 
-        // --- Init DAO ---
-        vitalsDao = AppDatabase.getInstance(this).vitalsDao();
+        // --- Init ViewModel ---
+        vitalsViewModel = new ViewModelProvider(this).get(VitalsViewModel.class);
+
+        // --- Observe latest vitals from DB ---
+        vitalsViewModel.getLatestVitalsForPatient(patientId).observe(this, latest -> {
+            if (latest != null) {
+                updateUI(
+                        latest.getHeartRate(),
+                        latest.getSystolicBP(),
+                        latest.getDiastolicBP(),
+                        latest.getTemperature(),
+                        latest.getRespiratoryRate()
+                );
+            }
+        });
 
         // --- Try to fetch vitals from API ---
         fetchVitalsFromApi();
@@ -49,39 +62,26 @@ public class VitalsActivity extends AppCompatActivity {
             public void onResponse(Call<Vitals> call, Response<Vitals> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Vitals vitals = response.body();
-                    updateUI(vitals.heartRate, vitals.systolicBP, vitals.diastolicBP,
-                            vitals.temperature, vitals.respiratoryRate);
+                    updateUI(
+                            vitals.getHeartRate(),
+                            vitals.getSystolicBP(),
+                            vitals.getDiastolicBP(),
+                            vitals.getTemperature(),
+                            vitals.getRespiratoryRate()
+                    );
 
-                    //  Save to DB
-                    saveVitalsToDb(vitals);
+                    // Save to DB via ViewModel
+                    vitalsViewModel.insert(vitals);
                 } else {
-                    loadFromDbOrIntent();
+                    loadFromIntent(); // fallback
                 }
             }
 
             @Override
             public void onFailure(Call<Vitals> call, Throwable t) {
-                loadFromDbOrIntent();
+                loadFromIntent(); // fallback
             }
         });
-    }
-
-    private void saveVitalsToDb(Vitals vitals) {
-        new Thread(() -> vitalsDao.insert(vitals)).start();
-    }
-
-    private void loadFromDbOrIntent() {
-        new Thread(() -> {
-            Vitals latest = vitalsDao.findLatestForPatient(patientId);
-            runOnUiThread(() -> {
-                if (latest != null) {
-                    updateUI(latest.heartRate, latest.systolicBP, latest.diastolicBP,
-                            latest.temperature, latest.respiratoryRate);
-                } else {
-                    loadFromIntent(); // final fallback
-                }
-            });
-        }).start();
     }
 
     private void loadFromIntent() {
@@ -95,9 +95,9 @@ public class VitalsActivity extends AppCompatActivity {
         tvHeartRate.setText("Heart Rate: " + heartRate + " bpm");
         tvRespiratoryRate.setText("Respiratory Rate: " + respiratoryRate + " breaths/min");
 
-        //  Save fallback vitals to DB too
+        // Save fallback vitals to DB too
         Vitals vitals = new Vitals(patientId, heartRate, 120, 80, temperature, respiratoryRate);
-        saveVitalsToDb(vitals);
+        vitalsViewModel.insert(vitals);
     }
 
     private void updateUI(int heartRate, int systolicBP, int diastolicBP,
@@ -108,6 +108,7 @@ public class VitalsActivity extends AppCompatActivity {
         tvRespiratoryRate.setText("Respiratory Rate: " + respiratoryRate + " breaths/min");
     }
 }
+
 
 
 
