@@ -1,45 +1,69 @@
-package com.example.leedstrinity.hospimanagementapp.domain;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
 import com.example.leedstrinity.hospimanagementapp.data.repo.AppointmentRepository;
+import com.example.leedstrinity.hospimanagementapp.domain.GetTodaysAppointmentsUseCase;
 
-import java.util.Calendar;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class GetTodaysAppointmentsUseCaseTest {
 
-    private final AppointmentRepository repo;
+    @Rule
+    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
-    public GetTodaysAppointmentsUseCase(AppointmentRepository repo) {
-        this.repo = repo;
+    private AppointmentRepository repo;
+    private GetTodaysAppointmentsUseCase useCase;
+
+    @Before
+    public void setUp() {
+        repo = mock(AppointmentRepository.class);
+        useCase = new GetTodaysAppointmentsUseCase(repo);
     }
 
-    /**
-     * Compute today's start and end millis internally,
-     * then fetch appointments for that clinic.
-     */
-    public LiveData<List<Appointment>> execute(String clinic) throws Exception {
-        // Start of today (00:00:00)
-        Calendar startCal = Calendar.getInstance();
-        startCal.set(Calendar.HOUR_OF_DAY, 0);
-        startCal.set(Calendar.MINUTE, 0);
-        startCal.set(Calendar.SECOND, 0);
-        startCal.set(Calendar.MILLISECOND, 0);
-        long startMillis = startCal.getTimeInMillis();
+    @Test
+    public void testExecuteReturnsAppointments() throws Exception {
+        List<Appointment> appointments = Arrays.asList(new Appointment(), new Appointment());
+        MutableLiveData<List<Appointment>> liveData = new MutableLiveData<>(appointments);
 
-        // End of today (23:59:59)
-        Calendar endCal = Calendar.getInstance();
-        endCal.set(Calendar.HOUR_OF_DAY, 23);
-        endCal.set(Calendar.MINUTE, 59);
-        endCal.set(Calendar.SECOND, 59);
-        endCal.set(Calendar.MILLISECOND, 999);
-        long endMillis = endCal.getTimeInMillis();
+        when(repo.getTodaysAppointments("Clinic A", 0L, Long.MAX_VALUE)).thenReturn(liveData);
 
-        return repo.getTodaysAppointments(clinic, startMillis, endMillis);
+        LiveData<List<Appointment>> result = useCase.execute("Clinic A");
+
+        assertNotNull(result);
+        assertEquals(2, result.getValue().size());
+    }
+
+    @Test
+    public void testExecuteReturnsEmptyListWhenNoAppointments() throws Exception {
+        MutableLiveData<List<Appointment>> liveData = new MutableLiveData<>(Collections.emptyList());
+
+        when(repo.getTodaysAppointments("Clinic A", 0L, Long.MAX_VALUE)).thenReturn(liveData);
+
+        LiveData<List<Appointment>> result = useCase.execute("Clinic A");
+
+        assertNotNull(result);
+        assertTrue(result.getValue().isEmpty());
     }
 }
+
+
+
+
+
 
 
 

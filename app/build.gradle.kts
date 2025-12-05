@@ -75,7 +75,18 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     testImplementation("org.mockito:mockito-core:5.2.0")
     testImplementation("org.mockito:mockito-inline:5.2.0")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+
+
 }
+
+tasks.register("cleanInstallDebug") {
+    group = "build"
+    description = "Cleans, builds, and installs the debug APK on a connected device/emulator."
+
+    dependsOn("clean", "installDebug")
+}
+
 
 
 

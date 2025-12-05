@@ -16,11 +16,7 @@ public class GetTodaysAppointmentsUseCase {
         this.repo = repo;
     }
 
-    /**
-     * Compute today's start and end millis internally,
-     * then fetch appointments for that clinic.
-     */
-    public LiveData<List<Appointment>> execute(String clinic) throws Exception {
+    public LiveData<List<Appointment>> execute(String clinic) {
         // Start of today (00:00:00)
         Calendar startCal = Calendar.getInstance();
         startCal.set(Calendar.HOUR_OF_DAY, 0);
@@ -40,6 +36,7 @@ public class GetTodaysAppointmentsUseCase {
         return repo.getTodaysAppointments(clinic, startMillis, endMillis);
     }
 }
+
 
 
 

@@ -1,10 +1,10 @@
 package com.example.leedstrinity.hospimanagementapp.data.entities;
 
 import androidx.annotation.NonNull;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 import androidx.room.ColumnInfo;
+import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
@@ -17,7 +17,7 @@ public class Vitals {
 
     @NonNull
     @ColumnInfo(name = "patient_id")
-    private String patientId;
+    private String patientId;   // must always be set before insert
 
     @ColumnInfo(name = "heart_rate_bpm")
     private int heartRate;
@@ -71,6 +71,16 @@ public class Vitals {
         this(patientId, heartRate, systolicBP, diastolicBP, temperature, respiratoryRate, new Date());
     }
 
+    // --- Static factory method (forces patientId) ---
+    public static Vitals forPatient(@NonNull String patientId,
+                                    int heartRate,
+                                    int systolicBP,
+                                    int diastolicBP,
+                                    double temperature,
+                                    int respiratoryRate) {
+        return new Vitals(patientId, heartRate, systolicBP, diastolicBP, temperature, respiratoryRate);
+    }
+
     // --- Getters and setters ---
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
@@ -97,6 +107,9 @@ public class Vitals {
     public Date getRecordedAt() { return recordedAt; }
     public void setRecordedAt(Date recordedAt) { this.recordedAt = recordedAt; }
 }
+
+
+
 
 
 

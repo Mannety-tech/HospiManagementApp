@@ -22,15 +22,16 @@ public class BookOrRescheduleAppointmentUseCaseTest {
 
     @Test
     public void testExecute_returnsBookedAppointment() throws Exception {
-        // ✅ Use the constructor that matches your entity
+        // Use the constructor that matches your entity (9 args)
         Appointment input = new Appointment(
                 "John Doe",      // patientName
                 "2025-11-25",    // date
                 "10:00",         // time
                 "Checkup",       // reason
-                "Dr. Smith",     // doctorName
-                1000L,           // start
-                2000L,           // end
+                "Dr. Smith",     // specialistName
+                1000L,           // startTimeMillis
+                2000L,           // endTimeMillis
+                "Clinic A",      // clinicLocation
                 "BOOKED"         // status
         );
 
@@ -38,8 +39,8 @@ public class BookOrRescheduleAppointmentUseCaseTest {
 
         Appointment result = useCase.execute(input);
 
-        assertEquals("Dr. Smith", result.getDoctorName());
-        assertEquals("BOOKED", result.status);
+        assertEquals("Dr. Smith", result.getSpecialistName());
+        assertEquals("BOOKED", result.getStatus());
         verify(mockRepo).bookOrReschedule(input);
     }
 }

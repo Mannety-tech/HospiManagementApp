@@ -10,6 +10,7 @@ import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
 import com.example.leedstrinity.hospimanagementapp.network.dto.ApiClient;
 import com.example.leedstrinity.hospimanagementapp.network.dto.AppointmentDto;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,21 +29,27 @@ public class AppointmentRepository {
     /**
      * Fetch today's appointments from API, insert into local DB, and return appointments between start and end.
      */
-    public LiveData<List<Appointment>> getTodaysAppointments(String clinic, long start, long end) throws Exception {
-        Response<List<AppointmentDto>> response =
-                api.appointmentApi().getTodaysAppointments(clinic).execute();
-
+    public LiveData<List<Appointment>> getTodaysAppointments(String clinic, long start, long end) {
         List<Appointment> mapped = new ArrayList<>();
 
-        if (response.isSuccessful() && response.body() != null) {
-            for (AppointmentDto dto : response.body()) {
-                mapped.add(map(dto));
-            }
-        }
+        try {
+            Response<List<AppointmentDto>> response =
+                    api.appointmentApi().getTodaysAppointments(clinic).execute();
 
-        // Insert into local DB
-        for (Appointment appointment : mapped) {
-            dao.insert(appointment);
+            if (response.isSuccessful() && response.body() != null) {
+                for (AppointmentDto dto : response.body()) {
+                    mapped.add(map(dto));
+                }
+            }
+
+            // Insert into local DB
+            for (Appointment appointment : mapped) {
+                dao.insert(appointment);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Optionally log or handle error
         }
 
         // Return reactive query
@@ -52,40 +59,48 @@ public class AppointmentRepository {
     /**
      * Book or reschedule an appointment via API and update local DB.
      */
-    public Appointment bookOrReschedule(Appointment appt) throws Exception {
-        AppointmentDto dto = new AppointmentDto();
-        dto.setId(appt.getId());
-        dto.setPatientName(appt.getPatientName());
-        dto.setDate(appt.getDate());
-        dto.setTime(appt.getTime());
-        dto.setReason(appt.getReason());
-        dto.setSpecialistName(appt.getSpecialistName());
-        dto.setClinicLocation(appt.getClinicLocation());
-        dto.setStartTime(appt.getStartTimeMillis());
-        dto.setEndTime(appt.getEndTimeMillis());
-        dto.setStatus(appt.getStatus());
+    public Appointment bookOrReschedule(Appointment appt) {
+        Appointment saved = null;
 
-        Response<AppointmentDto> response =
-                api.appointmentApi().bookOrReschedule(dto).execute();
+        try {
+            AppointmentDto dto = new AppointmentDto();
+            dto.setId(appt.getId());
+            dto.setPatientName(appt.getPatientName());
+            dto.setDate(appt.getDate());
+            dto.setTime(appt.getTime());
+            dto.setReason(appt.getReason());
+            dto.setSpecialistName(appt.getSpecialistName());
+            dto.setClinicLocation(appt.getClinicLocation());
+            dto.setStartTime(appt.getStartTimeMillis());
+            dto.setEndTime(appt.getEndTimeMillis());
+            dto.setStatus(appt.getStatus());
 
-        if (response.isSuccessful() && response.body() != null) {
-            Appointment saved = map(response.body());
+            Response<AppointmentDto> response =
+                    api.appointmentApi().bookOrReschedule(dto).execute();
 
-            // Preserve ID if API didn’t return one
-            if (saved.getId() == 0) {
-                saved.setId(appt.getId());
-            }
+            if (response.isSuccessful() && response.body() != null) {
+                saved = map(response.body());
 
-            if (appt.getId() == 0) {
-                dao.insert(saved);
+                // Preserve ID if API didn’t return one
+                if (saved.getId() == 0) {
+                    saved.setId(appt.getId());
+                }
+
+                if (appt.getId() == 0) {
+                    dao.insert(saved);
+                } else {
+                    dao.update(saved);
+                }
             } else {
-                dao.update(saved);
+                throw new IllegalStateException("Booking failed");
             }
 
-            return saved;
-        } else {
-            throw new IllegalStateException("Booking failed");
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IllegalStateException("Network error while booking", e);
         }
+
+        return saved;
     }
 
     /**
@@ -118,6 +133,7 @@ public class AppointmentRepository {
         return appointment;
     }
 }
+
 
 
 
