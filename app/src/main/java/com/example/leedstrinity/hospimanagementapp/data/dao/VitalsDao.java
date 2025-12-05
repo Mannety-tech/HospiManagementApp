@@ -16,26 +16,25 @@ import java.util.List;
 @Dao
 public interface VitalsDao {
 
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Vitals vitals);
-
 
     @Update
     void update(Vitals vitals);
 
-
+    // Get all vitals for a patient
     @Query("SELECT * FROM vitals WHERE patient_id = :patientId ORDER BY recorded_at DESC")
-    LiveData<List<Vitals>> findByPatient(String patientId);
+    LiveData<List<Vitals>> getVitalsForPatient(int patientId);
 
-
+    // Get vitals between two dates
     @Query("SELECT * FROM vitals WHERE recorded_at BETWEEN :start AND :end ORDER BY recorded_at ASC")
     LiveData<List<Vitals>> findBetweenDates(Date start, Date end);
 
-
+    // Get the latest vitals for a patient
     @Query("SELECT * FROM vitals WHERE patient_id = :patientId ORDER BY recorded_at DESC LIMIT 1")
-    LiveData<Vitals> findLatestForPatient(String patientId);
+    LiveData<Vitals> findLatestForPatient(int patientId);
 }
+
 
 
 

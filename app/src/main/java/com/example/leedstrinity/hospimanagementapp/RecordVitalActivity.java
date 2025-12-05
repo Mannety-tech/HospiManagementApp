@@ -16,7 +16,7 @@ public class RecordVitalActivity extends AppCompatActivity {
 
     private EditText heartRateEditText, systolicEditText, diastolicEditText,
             temperatureEditText, respRateEditText;
-    private String patientId;
+    private int patientId;
     private AppDatabase db;
 
     @Override
@@ -24,7 +24,14 @@ public class RecordVitalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_vitals);
 
-        patientId = getIntent().getStringExtra("patientId");
+        // --- Get patientId as int ---
+        patientId = getIntent().getIntExtra("patientId", -1);
+        if (patientId == -1) {
+            Toast.makeText(this, "No patient ID provided", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "hospital_db").build();
 
@@ -44,7 +51,8 @@ public class RecordVitalActivity extends AppCompatActivity {
             double temperature = Double.parseDouble(temperatureEditText.getText().toString().trim());
             int respRate = Integer.parseInt(respRateEditText.getText().toString().trim());
 
-            Vitals vitals = new Vitals(patientId, heartRate, systolic, diastolic, temperature, respRate);
+            //  Use factory method or setters
+            Vitals vitals = Vitals.forPatient(patientId, heartRate, systolic, diastolic, temperature, respRate);
 
             Executors.newSingleThreadExecutor().execute(() -> {
                 db.vitalsDao().insert(vitals);
@@ -94,4 +102,5 @@ public class RecordVitalActivity extends AppCompatActivity {
         return true;
     }
 }
+
 

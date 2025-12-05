@@ -23,15 +23,14 @@ public class VitalsViewModel extends AndroidViewModel {
         this.vitalsDao = db.vitalsDao();
     }
 
-    public void insert(@NonNull Vitals vitals, @NonNull String patientId) {
+
+    public void insert(@NonNull Vitals vitals, int patientId) {
         vitals.setPatientId(patientId);
         AppDatabase.databaseWriteExecutor.execute(() -> vitalsDao.insert(vitals));
     }
 
-    /**
-     * Convenience helper to record vitals directly for a patient.
-     */
-    public void recordVitalsForPatient(@NonNull String patientId,
+
+    public void recordVitalsForPatient(int patientId,
                                        int heartRate,
                                        int systolicBP,
                                        int diastolicBP,
@@ -48,34 +47,27 @@ public class VitalsViewModel extends AndroidViewModel {
         AppDatabase.databaseWriteExecutor.execute(() -> vitalsDao.insert(vitals));
     }
 
-    /**
-     * Update an existing vitals record.
-     */
+
     public void update(@NonNull Vitals vitals) {
         AppDatabase.databaseWriteExecutor.execute(() -> vitalsDao.update(vitals));
     }
 
-    /**
-     * Observe all vitals for a given patient.
-     */
-    public LiveData<List<Vitals>> getVitalsForPatient(@NonNull String patientId) {
-        return vitalsDao.findByPatient(patientId);
+
+    public LiveData<List<Vitals>> getVitalsForPatient(int patientId) {
+        return vitalsDao.getVitalsForPatient(patientId);
     }
 
-    /**
-     * Observe vitals recorded between two dates.
-     */
+
     public LiveData<List<Vitals>> getVitalsBetweenDates(@NonNull Date start, @NonNull Date end) {
         return vitalsDao.findBetweenDates(start, end);
     }
 
-    /**
-     * Observe the latest vitals entry for a patient.
-     */
-    public LiveData<Vitals> getLatestVitalsForPatient(@NonNull String patientId) {
+
+    public LiveData<Vitals> getLatestVitalsForPatient(int patientId) {
         return vitalsDao.findLatestForPatient(patientId);
     }
 }
+
 
 
 

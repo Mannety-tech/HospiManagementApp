@@ -132,7 +132,7 @@ public class SignupActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) { }
         });
 
-        // --- Signup button logic (unchanged) ---
+        // --- Signup button logic ---
         btnSignup.setOnClickListener(v -> {
             String name = etName.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
@@ -155,7 +155,7 @@ public class SignupActivity extends AppCompatActivity {
                 );
 
                 new Thread(() -> {
-                    db.patientDao().insertPatient(newPatient);
+                    db.patientDao().insert(newPatient);
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Patient signup successful!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(SignupActivity.this, LoginActivity.class));
@@ -216,6 +216,7 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 }
+
 
 
 

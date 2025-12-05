@@ -1,6 +1,5 @@
 package com.example.leedstrinity.hospimanagementapp;
 
-
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -18,7 +17,7 @@ public class VitalsActivity extends AppCompatActivity {
 
     private VitalsViewModel vitalsViewModel;
     private VitalsAdapter vitalsAdapter;
-    private String patientId;
+    private int patientId; // ✅ use int not String
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,17 +25,17 @@ public class VitalsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_vitals);
 
         // --- Get patientId from Intent ---
-        patientId = getIntent().getStringExtra("patientId");
-        if (patientId == null || patientId.isEmpty()) {
+        patientId = getIntent().getIntExtra("patientId", -1);
+        if (patientId == -1) {
             Toast.makeText(this, "No patient ID provided", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
         // --- Setup RecyclerView ---
-        RecyclerView recyclerView = findViewById(R.id.vitalsRecyclerView); // ensure XML id matches
+        RecyclerView recyclerView = findViewById(R.id.vitalsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        vitalsAdapter = new VitalsAdapter(new ArrayList<>()); // start with empty list
+        vitalsAdapter = new VitalsAdapter(new ArrayList<>());
         recyclerView.setAdapter(vitalsAdapter);
 
         // --- Init ViewModel ---
@@ -45,13 +44,14 @@ public class VitalsActivity extends AppCompatActivity {
         // --- Observe vitals for this patient ---
         vitalsViewModel.getVitalsForPatient(patientId).observe(this, vitalsList -> {
             if (vitalsList != null && !vitalsList.isEmpty()) {
-                vitalsAdapter.updateVitals(vitalsList); // refresh adapter data
+                vitalsAdapter.updateVitals(vitalsList);
             } else {
-                Toast.makeText(this, "No vitals recorded for " + patientId, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "No vitals recorded for patient ID " + patientId, Toast.LENGTH_SHORT).show();
             }
         });
     }
 }
+
 
 
 

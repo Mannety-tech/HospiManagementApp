@@ -7,21 +7,26 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.leedstrinity.hospimanagementapp.data.entities.Patient;
+import com.example.leedstrinity.hospimanagementapp.network.dto.PatientViewModel;
 
 public class ClinicalRecordActivity extends AppCompatActivity {
 
-    // Form fields
     private EditText patientNameEditText;
     private EditText diagnosisEditText;
     private EditText treatmentEditText;
     private EditText notesEditText;
+
+    private PatientViewModel patientViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clinical_records);
 
-        // Bind UI elements
+        // Bind UI
         patientNameEditText = findViewById(R.id.editTextPatientName);
         diagnosisEditText = findViewById(R.id.editTextDiagnosis);
         treatmentEditText = findViewById(R.id.editTextTreatment);
@@ -31,6 +36,9 @@ public class ClinicalRecordActivity extends AppCompatActivity {
         Button viewVitalsButton = findViewById(R.id.buttonViewVitals);
         Button clinicianFormButton = findViewById(R.id.buttonClinicianForm);
         Button clinicianListButton = findViewById(R.id.buttonClinicianList);
+
+        // Init ViewModel
+        patientViewModel = new ViewModelProvider(this).get(PatientViewModel.class);
 
         // Save record logic
         saveRecordButton.setOnClickListener(v -> {
@@ -42,36 +50,45 @@ public class ClinicalRecordActivity extends AppCompatActivity {
             if (name.isEmpty() || diagnosis.isEmpty() || treatment.isEmpty()) {
                 Toast.makeText(this, "Please fill in required fields", Toast.LENGTH_SHORT).show();
             } else {
+                // Create and insert patient (demo placeholders for missing fields)
+                Patient patient = new Patient(
+                        name, "", "", "", "", "NHS123456", "email@example.com", "password", "patient"
+                );
+                patientViewModel.insert(patient);
+
                 Toast.makeText(this,
                         "Clinical record saved for " + name,
                         Toast.LENGTH_LONG).show();
-                // TODO: Save to database or send to server
             }
         });
 
         // Navigate to Vitals page
         viewVitalsButton.setOnClickListener(v -> {
-            String patientId = patientNameEditText.getText().toString().trim();
-            // Replace with actual patientId from DB if available
-
-            Intent intent = new Intent(this, VitalsActivity.class);
-            intent.putExtra("patientId", patientId);
-            startActivity(intent);
+            patientViewModel.getAllPatients().observe(this, patients -> {
+                if (patients != null && !patients.isEmpty()) {
+                    Patient patient = patients.get(0); // demo: first patient
+                    Intent intent = new Intent(this, VitalsActivity.class);
+                    intent.putExtra("patientId", patient.getId());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, "No patients found", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
         // Open Clinician Form
         clinicianFormButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ClinicianFormActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, ClinicianFormActivity.class));
         });
 
         // Open Clinician List
         clinicianListButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ClinicianListActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, ClinicianListActivity.class));
         });
     }
 }
+
+
 
 
 

@@ -2,6 +2,7 @@ package com.example.leedstrinity.hospimanagementapp.data.entities;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.Ignore;
 
 @Entity(tableName = "clinic")
 public class Clinic {
@@ -15,7 +16,8 @@ public class Clinic {
     // No-arg constructor (Room uses this)
     public Clinic() {}
 
-    // Convenience constructor
+    // Convenience constructor (ignored by Room)
+    @Ignore
     public Clinic(String name, String address) {
         this.name = name;
         this.address = address;
@@ -31,4 +33,6 @@ public class Clinic {
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 }
+
+
 

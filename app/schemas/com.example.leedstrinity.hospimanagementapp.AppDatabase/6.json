@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "79722210d511062f2dc9fee1e4e9c25e",
+    "identityHash": "4672ab6f2eda8b56ae4a6e0133f66131",
     "entities": [
       {
         "tableName": "appointments",
@@ -147,7 +147,7 @@
       },
       {
         "tableName": "vitals",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `patient_id` TEXT NOT NULL, `heart_rate_bpm` INTEGER NOT NULL, `blood_pressure_systolic` INTEGER NOT NULL, `blood_pressure_diastolic` INTEGER NOT NULL, `temperature_celsius` REAL NOT NULL, `respiratory_rate_bpm` INTEGER NOT NULL, `recorded_at` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `patient_id` INTEGER NOT NULL, `heartRate` INTEGER NOT NULL, `systolicBP` INTEGER NOT NULL, `diastolicBP` INTEGER NOT NULL, `temperature` REAL NOT NULL, `respiratoryRate` INTEGER NOT NULL, `recorded_at` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -158,36 +158,36 @@
           {
             "fieldPath": "patientId",
             "columnName": "patient_id",
-            "affinity": "TEXT",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "heartRate",
-            "columnName": "heart_rate_bpm",
+            "columnName": "heartRate",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "systolicBP",
-            "columnName": "blood_pressure_systolic",
+            "columnName": "systolicBP",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "diastolicBP",
-            "columnName": "blood_pressure_diastolic",
+            "columnName": "diastolicBP",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "temperature",
-            "columnName": "temperature_celsius",
+            "columnName": "temperature",
             "affinity": "REAL",
             "notNull": true
           },
           {
             "fieldPath": "respiratoryRate",
-            "columnName": "respiratory_rate_bpm",
+            "columnName": "respiratoryRate",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -204,7 +204,17 @@
             "id"
           ]
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_vitals_patient_id",
+            "unique": false,
+            "columnNames": [
+              "patient_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_vitals_patient_id` ON `${TABLE_NAME}` (`patient_id`)"
+          }
+        ],
         "foreignKeys": []
       },
       {
@@ -441,7 +451,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '79722210d511062f2dc9fee1e4e9c25e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4672ab6f2eda8b56ae4a6e0133f66131')"
     ]
   }
 }
