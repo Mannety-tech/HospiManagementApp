@@ -23,10 +23,6 @@ public class VitalsViewModel extends AndroidViewModel {
         this.vitalsDao = db.vitalsDao();
     }
 
-    /**
-     * Insert a new vitals record for a patient.
-     * Ensures patientId is always set before persisting.
-     */
     public void insert(@NonNull Vitals vitals, @NonNull String patientId) {
         vitals.setPatientId(patientId);
         AppDatabase.databaseWriteExecutor.execute(() -> vitalsDao.insert(vitals));
