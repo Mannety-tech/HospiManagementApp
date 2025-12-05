@@ -20,19 +20,20 @@ public class VitalsViewModel extends AndroidViewModel {
     public VitalsViewModel(@NonNull Application application) {
         super(application);
         AppDatabase db = AppDatabase.getInstance(application);
-        vitalsDao = db.vitalsDao();
+        this.vitalsDao = db.vitalsDao();
     }
 
     /**
-     * Insert new vitals record, ensuring patientId is set.
+     * Insert a new vitals record for a patient.
+     * Ensures patientId is always set before persisting.
      */
-    public void insert(Vitals vitals, @NonNull String patientId) {
-        vitals.setPatientId(patientId);   // critical: must not be null
+    public void insert(@NonNull Vitals vitals, @NonNull String patientId) {
+        vitals.setPatientId(patientId);
         AppDatabase.databaseWriteExecutor.execute(() -> vitalsDao.insert(vitals));
     }
 
     /**
-     * Convenience helper: record vitals directly for a patient.
+     * Convenience helper to record vitals directly for a patient.
      */
     public void recordVitalsForPatient(@NonNull String patientId,
                                        int heartRate,
@@ -52,32 +53,33 @@ public class VitalsViewModel extends AndroidViewModel {
     }
 
     /**
-     * Update existing vitals record.
+     * Update an existing vitals record.
      */
-    public void update(Vitals vitals) {
+    public void update(@NonNull Vitals vitals) {
         AppDatabase.databaseWriteExecutor.execute(() -> vitalsDao.update(vitals));
     }
 
     /**
-     * Observe all vitals for a patient.
+     * Observe all vitals for a given patient.
      */
-    public LiveData<List<Vitals>> getVitalsForPatient(String patientId) {
+    public LiveData<List<Vitals>> getVitalsForPatient(@NonNull String patientId) {
         return vitalsDao.findByPatient(patientId);
     }
 
     /**
-     * Observe vitals between two dates.
+     * Observe vitals recorded between two dates.
      */
-    public LiveData<List<Vitals>> getVitalsBetweenDates(Date start, Date end) {
+    public LiveData<List<Vitals>> getVitalsBetweenDates(@NonNull Date start, @NonNull Date end) {
         return vitalsDao.findBetweenDates(start, end);
     }
 
     /**
-     * Observe the latest vitals for a patient.
+     * Observe the latest vitals entry for a patient.
      */
-    public LiveData<Vitals> getLatestVitalsForPatient(String patientId) {
+    public LiveData<Vitals> getLatestVitalsForPatient(@NonNull String patientId) {
         return vitalsDao.findLatestForPatient(patientId);
     }
 }
+
 
 

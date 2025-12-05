@@ -8,6 +8,10 @@ import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
+/**
+ * Entity representing a patient's vital signs record.
+ * Each record is tied to a patientId and includes timestamped measurements.
+ */
 @Entity(tableName = "vitals")
 public class Vitals {
 
@@ -39,7 +43,7 @@ public class Vitals {
 
     // --- Required no-arg constructor for Room ---
     public Vitals() {
-        this.recordedAt = new Date(); // default timestamp
+        this.recordedAt = new Date(); // default timestamp at creation
     }
 
     // --- Full constructor (explicit timestamp) ---
@@ -50,7 +54,7 @@ public class Vitals {
                   int diastolicBP,
                   double temperature,
                   int respiratoryRate,
-                  Date recordedAt) {
+                  @NonNull Date recordedAt) {
         this.patientId = patientId;
         this.heartRate = heartRate;
         this.systolicBP = systolicBP;
@@ -71,7 +75,7 @@ public class Vitals {
         this(patientId, heartRate, systolicBP, diastolicBP, temperature, respiratoryRate, new Date());
     }
 
-    // --- Static factory method (forces patientId) ---
+    // --- Static factory method (forces patientId, auto timestamp) ---
     public static Vitals forPatient(@NonNull String patientId,
                                     int heartRate,
                                     int systolicBP,
@@ -104,9 +108,11 @@ public class Vitals {
     public int getRespiratoryRate() { return respiratoryRate; }
     public void setRespiratoryRate(int respiratoryRate) { this.respiratoryRate = respiratoryRate; }
 
+    @NonNull
     public Date getRecordedAt() { return recordedAt; }
-    public void setRecordedAt(Date recordedAt) { this.recordedAt = recordedAt; }
+    public void setRecordedAt(@NonNull Date recordedAt) { this.recordedAt = recordedAt; }
 }
+
 
 
 

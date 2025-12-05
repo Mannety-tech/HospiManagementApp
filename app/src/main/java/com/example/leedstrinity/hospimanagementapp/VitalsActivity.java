@@ -1,5 +1,6 @@
 package com.example.leedstrinity.hospimanagementapp;
 
+
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -8,11 +9,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.leedstrinity.hospimanagementapp.data.entities.Vitals;
 import com.example.leedstrinity.hospimanagementapp.feature.appointments.ui.VitalsViewModel;
 import com.example.leedstrinity.hospimanagementapp.feature.appointments.ui.adapters.VitalsAdapter;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class VitalsActivity extends AppCompatActivity {
 
@@ -34,9 +34,9 @@ public class VitalsActivity extends AppCompatActivity {
         }
 
         // --- Setup RecyclerView ---
-        RecyclerView recyclerView = findViewById(R.id.recyclerViewVitals);
+        RecyclerView recyclerView = findViewById(R.id.vitalsRecyclerView); // ensure XML id matches
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        vitalsAdapter = new VitalsAdapter();
+        vitalsAdapter = new VitalsAdapter(new ArrayList<>()); // start with empty list
         recyclerView.setAdapter(vitalsAdapter);
 
         // --- Init ViewModel ---
@@ -45,13 +45,14 @@ public class VitalsActivity extends AppCompatActivity {
         // --- Observe vitals for this patient ---
         vitalsViewModel.getVitalsForPatient(patientId).observe(this, vitalsList -> {
             if (vitalsList != null && !vitalsList.isEmpty()) {
-                vitalsAdapter.setVitals(vitalsList);
+                vitalsAdapter.updateVitals(vitalsList); // refresh adapter data
             } else {
                 Toast.makeText(this, "No vitals recorded for " + patientId, Toast.LENGTH_SHORT).show();
             }
         });
     }
 }
+
 
 
 

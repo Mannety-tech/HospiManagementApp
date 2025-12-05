@@ -1,7 +1,6 @@
 package com.example.leedstrinity.hospimanagementapp.network.dto;
 
 import okhttp3.CertificatePinner;
-import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
 import java.util.concurrent.TimeUnit;
 
@@ -11,7 +10,7 @@ public class SecureHttpClientProvider {
         // Pin your backend’s certificate (replace with your real domain + SHA-256 hash)
         CertificatePinner certificatePinner = new CertificatePinner.Builder()
                 .add("api.yourdomain.com",
-                        "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
+                        "sha256/sha256/RhKPhUt34qSWDMKCAd37/UUNUV0tOhZ2EYbpRKGPDbo=")
                 .build();
 
         return new OkHttpClient.Builder()

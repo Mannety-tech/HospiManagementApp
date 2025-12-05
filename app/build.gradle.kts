@@ -50,6 +50,7 @@ dependencies {
     implementation("androidx.activity:activity:1.7.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    
 
     // Room (Java setup)
     implementation("androidx.room:room-runtime:2.6.1")
@@ -68,6 +69,7 @@ dependencies {
 
     // Biometric
     implementation("androidx.biometric:biometric:1.2.0-alpha05")
+
 
     // Testing
     testImplementation("junit:junit:4.13.2")
