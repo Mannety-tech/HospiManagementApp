@@ -43,8 +43,8 @@
         <activity android:name=".ViewAppointmentsActivity" android:exported="true" />
         <activity android:name=".ResetPasswordActivity" android:exported="true" />
         <activity android:name=".LoginActivity" android:exported="true" />
-        <activity android:name=".VitalsActivity" android:exported="true" />
-
+        <activity android:name=".PatientVitalsActivity" android:exported="true" />
+        <activity android:name=".RecordVitalActivity" android:exported="true" />
 
         <!-- Admin flow -->
         <activity android:name=".AdminLoginActivity" android:exported="false" />
@@ -64,6 +64,7 @@
         <activity android:name=".feature.appointments.ui.BookingActivity" android:exported="false" />
 
     </application>
+
 </manifest>
 
 

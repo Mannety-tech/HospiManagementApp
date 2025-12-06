@@ -2,27 +2,28 @@ package com.example.leedstrinity.hospimanagementapp;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.leedstrinity.hospimanagementapp.data.Converters;
+import com.example.leedstrinity.hospimanagementapp.data.dao.AppointmentDao;
+import com.example.leedstrinity.hospimanagementapp.data.dao.ClinicDao;
+import com.example.leedstrinity.hospimanagementapp.data.dao.ClinicalRecordDao;
+import com.example.leedstrinity.hospimanagementapp.data.dao.ClinicianDao;
 import com.example.leedstrinity.hospimanagementapp.data.dao.PatientDao;
 import com.example.leedstrinity.hospimanagementapp.data.dao.StaffDao;
 import com.example.leedstrinity.hospimanagementapp.data.dao.VitalsDao;
-import com.example.leedstrinity.hospimanagementapp.data.dao.ClinicianDao;
-import com.example.leedstrinity.hospimanagementapp.data.dao.ClinicDao;
-import com.example.leedstrinity.hospimanagementapp.data.dao.ClinicalRecordDao;
-import com.example.leedstrinity.hospimanagementapp.data.dao.AppointmentDao;
-
+import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
+import com.example.leedstrinity.hospimanagementapp.data.entities.Clinic;
+import com.example.leedstrinity.hospimanagementapp.data.entities.ClinicalRecord;
+import com.example.leedstrinity.hospimanagementapp.data.entities.Clinician;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Patient;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Staff;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Vitals;
-import com.example.leedstrinity.hospimanagementapp.data.entities.Clinician;
-import com.example.leedstrinity.hospimanagementapp.data.entities.Clinic;
-import com.example.leedstrinity.hospimanagementapp.data.entities.ClinicalRecord;
-import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,7 +38,7 @@ import java.util.concurrent.Executors;
                 ClinicalRecord.class,
                 Appointment.class
         },
-        version = 3,
+        version = 8,   // ⬅️ bumped version to reflect latest schema changes
         exportSchema = true
 )
 @TypeConverters({Converters.class})
@@ -68,8 +69,30 @@ public abstract class AppDatabase extends RoomDatabase {
                                     AppDatabase.class,
                                     "hospital_db"
                             )
-                            // During development, fallback clears DB if schema changes
+                            // Dev shortcut: wipes DB if schema changes
                             .fallbackToDestructiveMigration()
+                            // Optional: pre-populate demo data
+                            .addCallback(new RoomDatabase.Callback() {
+                                @Override
+                                public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                                    super.onCreate(db);
+                                    databaseWriteExecutor.execute(() -> {
+                                        // Example demo staff records
+                                        Staff cardiology = new Staff(
+                                                "Alice", "Smith", "EMP001",
+                                                "Cardiology", "Doctor", "Clinic A",
+                                                "07123456789", "alice@hospital.com", "pass123"
+                                        );
+                                        Staff neurology = new Staff(
+                                                "Bob", "Jones", "EMP002",
+                                                "Neurology", "Doctor", "Clinic B",
+                                                "07987654321", "bob@hospital.com", "pass123"
+                                        );
+                                        getInstance(context).staffDao().insert(cardiology);
+                                        getInstance(context).staffDao().insert(neurology);
+                                    });
+                                }
+                            })
                             .build();
                 }
             }
@@ -77,6 +100,9 @@ public abstract class AppDatabase extends RoomDatabase {
         return INSTANCE;
     }
 }
+
+
+
 
 
 

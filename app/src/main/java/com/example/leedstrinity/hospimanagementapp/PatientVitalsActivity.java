@@ -1,8 +1,12 @@
 package com.example.leedstrinity.hospimanagementapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,16 +17,19 @@ import com.example.leedstrinity.hospimanagementapp.feature.appointments.ui.adapt
 
 import java.util.ArrayList;
 
-public class VitalsActivity extends AppCompatActivity {
+public class PatientVitalsActivity extends AppCompatActivity {
 
     private VitalsViewModel vitalsViewModel;
     private VitalsAdapter vitalsAdapter;
-    private int patientId; // ✅ use int not String
+    private int patientId;
+
+    private TextView tvPatientName;
+    private Button btnAddVitals;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vitals);
+        setContentView(R.layout.activity_patient_vitals);
 
         // --- Get patientId from Intent ---
         patientId = getIntent().getIntExtra("patientId", -1);
@@ -31,6 +38,10 @@ public class VitalsActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        // --- Setup header ---
+        tvPatientName = findViewById(R.id.tvPatientName);
+        tvPatientName.setText("Patient ID: " + patientId);
 
         // --- Setup RecyclerView ---
         RecyclerView recyclerView = findViewById(R.id.vitalsRecyclerView);
@@ -49,14 +60,14 @@ public class VitalsActivity extends AppCompatActivity {
                 Toast.makeText(this, "No vitals recorded for patient ID " + patientId, Toast.LENGTH_SHORT).show();
             }
         });
+
+        // --- Record New Vitals button ---
+        btnAddVitals = findViewById(R.id.btnAddVitals);
+        btnAddVitals.setOnClickListener(v -> {
+            Intent intent = new Intent(PatientVitalsActivity.this, RecordVitalActivity.class);
+            intent.putExtra("patientId", patientId);
+            startActivity(intent);
+        });
     }
 }
-
-
-
-
-
-
-
-
 

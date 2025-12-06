@@ -23,50 +23,40 @@ public interface StaffDao {
     @Delete
     void delete(Staff staff);
 
-    // Login query
+    // --- Login query ---
     @Query("SELECT * FROM staff WHERE email = :email AND password = :password LIMIT 1")
     Staff login(String email, String password);
 
-    // Get all staff (synchronous)
+    // --- Get all staff (synchronous) ---
     @Query("SELECT * FROM staff")
     List<Staff> getAllStaff();
 
-    // Get all staff full names (reactive LiveData for UI auto‑updates)
-    @Query("SELECT firstName || ' ' || lastName FROM staff")
+    // --- Get all staff full names ---
+    @Query("SELECT first_name || ' ' || last_name FROM staff")
     LiveData<List<String>> getAllStaffFullNames();
 
-    // Find staff by ID
+    // --- Find staff by ID ---
     @Query("SELECT * FROM staff WHERE id = :staffId LIMIT 1")
     Staff findById(long staffId);
 
-    // Get all doctors' full names (first + last)
-    @Query("SELECT firstName || ' ' || lastName FROM staff WHERE specialty = 'Doctor'")
-    List<String> getAllDoctorNames();
-
-    // LiveData version
-    @Query("SELECT firstName || ' ' || lastName FROM staff WHERE specialty = 'Doctor'")
-    LiveData<List<String>> getAllDoctorNamesLive();
-
-    // Get doctors by specialty (dynamic)
-    @Query("SELECT firstName || ' ' || lastName FROM staff WHERE specialty = :specialty")
-    LiveData<List<String>> getDoctorNamesBySpecialty(String specialty);
-
-    // Get all distinct specialties
-    @Query("SELECT DISTINCT specialty FROM staff")
+    // --- Get all distinct specialties (for signup spinner) ---
+    @Query("SELECT DISTINCT specialty FROM staff WHERE specialty IS NOT NULL AND specialty != ''")
     LiveData<List<String>> getAllSpecialtiesLive();
 
-    // Get all specialists' full names
-    @Query("SELECT firstName || ' ' || lastName FROM staff WHERE specialty IS NOT NULL")
-    LiveData<List<String>> getAllSpecialistNamesLive();
-
-    // Get clinics by specialty
-    @Query("SELECT DISTINCT clinicLocation FROM staff WHERE specialty = :specialty")
+    // --- Get clinics by specialty (for signup spinner) ---
+    @Query("SELECT DISTINCT clinic_location FROM staff WHERE specialty = :specialty AND clinic_location IS NOT NULL AND clinic_location != ''")
     LiveData<List<String>> getClinicsBySpecialty(String specialty);
 
+    // --- Get all staff as LiveData ---
     @Query("SELECT * FROM staff")
     LiveData<List<Staff>> getAllStaffLive();
 
+    // --- Optional: get all specialists' names ---
+    @Query("SELECT first_name || ' ' || last_name FROM staff WHERE specialty IS NOT NULL AND specialty != ''")
+    LiveData<List<String>> getAllSpecialistNamesLive();
 }
+
+
 
 
 

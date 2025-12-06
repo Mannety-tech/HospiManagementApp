@@ -62,7 +62,7 @@ public class StaffRepository {
     }
 
     public LiveData<List<String>> getAllDoctorNamesLive() {
-        return staffDao.getAllDoctorNamesLive();
+        return staffDao.getAllSpecialistNamesLive();
     }
 
 

@@ -62,12 +62,12 @@ public class ClinicalRecordActivity extends AppCompatActivity {
             }
         });
 
-        // Navigate to Vitals page
+        // Navigate to PatientVitalsActivity instead of old VitalsActivity
         viewVitalsButton.setOnClickListener(v -> {
             patientViewModel.getAllPatients().observe(this, patients -> {
                 if (patients != null && !patients.isEmpty()) {
                     Patient patient = patients.get(0); // demo: first patient
-                    Intent intent = new Intent(this, VitalsActivity.class);
+                    Intent intent = new Intent(this, PatientVitalsActivity.class);
                     intent.putExtra("patientId", patient.getId());
                     startActivity(intent);
                 } else {
@@ -87,6 +87,7 @@ public class ClinicalRecordActivity extends AppCompatActivity {
         });
     }
 }
+
 
 
 

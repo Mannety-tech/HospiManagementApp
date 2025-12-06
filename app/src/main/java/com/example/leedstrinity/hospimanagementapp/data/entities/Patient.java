@@ -1,6 +1,8 @@
 package com.example.leedstrinity.hospimanagementapp.data.entities;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "patients")
@@ -9,23 +11,38 @@ public class Patient {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
+    @ColumnInfo(name = "name")
     private String name;
+
+    @ColumnInfo(name = "gender")
     private String gender;
+
+    @ColumnInfo(name = "date_of_birth")
     private String dateOfBirth;
+
+    @ColumnInfo(name = "contact_number")
     private String contactNumber;
+
+    @ColumnInfo(name = "address")
     private String address;
 
-    // NHS number
+    @ColumnInfo(name = "nhs_number")
     private String nhsNumber;
 
-    // Login fields
+    @ColumnInfo(name = "email")
     private String email;
+
+    @ColumnInfo(name = "password")
     private String password;
 
-    // Role: "patient" or "staff"
+    @ColumnInfo(name = "role")
     private String role;
 
-    // --- Constructor ---
+    // --- Default constructor (Room will use this) ---
+    public Patient() {}
+
+    // --- Full constructor (ignored by Room, safe for manual use) ---
+    @Ignore
     public Patient(String name,
                    String gender,
                    String dateOfBirth,
@@ -77,6 +94,8 @@ public class Patient {
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
 }
+
+
 
 
 

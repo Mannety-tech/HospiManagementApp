@@ -13,8 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.leedstrinity.hospimanagementapp.R;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Patient;
-import com.example.leedstrinity.hospimanagementapp.VitalsActivity;
+import com.example.leedstrinity.hospimanagementapp.PatientVitalsActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.PatientViewHolder> {
@@ -22,7 +23,8 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.PatientV
     private final List<Patient> patientList;
 
     public PatientAdapter(List<Patient> patientList) {
-        this.patientList = patientList;
+        // Defensive copy so we can safely clear/update later
+        this.patientList = patientList != null ? new ArrayList<>(patientList) : new ArrayList<>();
     }
 
     @NonNull
@@ -40,10 +42,11 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.PatientV
         holder.tvPatientName.setText(patient.getName());
         holder.tvPatientId.setText("ID: " + patient.getId());
 
-        // --- View Vitals button click ---
-        holder.btnViewVitals.setOnClickListener(v -> {
-            Context context = v.getContext();
-            Intent intent = new Intent(context, VitalsActivity.class);
+        Context context = holder.itemView.getContext();
+
+        // --- Launch PatientVitalsActivity ---
+        holder.btnVitalsPage.setOnClickListener(v -> {
+            Intent intent = new Intent(context, PatientVitalsActivity.class);
             intent.putExtra("patientId", patient.getId());
             context.startActivity(intent);
         });
@@ -54,17 +57,29 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.PatientV
         return patientList != null ? patientList.size() : 0;
     }
 
+    // 🔥 New method to update patients list
+    public void updatePatients(List<Patient> newPatients) {
+        patientList.clear();
+        if (newPatients != null) {
+            patientList.addAll(newPatients);
+        }
+        notifyDataSetChanged();
+    }
+
     static class PatientViewHolder extends RecyclerView.ViewHolder {
         TextView tvPatientName, tvPatientId;
-        Button btnViewVitals;
+        Button btnVitalsPage;
 
         PatientViewHolder(@NonNull View itemView) {
             super(itemView);
             tvPatientName = itemView.findViewById(R.id.tvPatientName);
             tvPatientId = itemView.findViewById(R.id.tvPatientId);
-            btnViewVitals = itemView.findViewById(R.id.btnViewVitals);
+            btnVitalsPage = itemView.findViewById(R.id.btnVitalsPage);
         }
     }
 }
+
+
+
 
 

@@ -3,6 +3,7 @@ package com.example.leedstrinity.hospimanagementapp.data.entities;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.Ignore;
+import androidx.room.ColumnInfo;
 
 @Entity(tableName = "staff")
 public class Staff {
@@ -10,14 +11,31 @@ public class Staff {
     @PrimaryKey(autoGenerate = true)
     private long id;
 
+    @ColumnInfo(name = "first_name")
     private String firstName;
+
+    @ColumnInfo(name = "last_name")
     private String lastName;
+
+    @ColumnInfo(name = "employee_number")
     private String employeeNumber;
+
+    @ColumnInfo(name = "specialty")
     private String specialty;
+
+    @ColumnInfo(name = "role")
     private String role;
+
+    @ColumnInfo(name = "clinic_location")
     private String clinicLocation;
+
+    @ColumnInfo(name = "phone")
     private String phone;
+
+    @ColumnInfo(name = "email")
     private String email;
+
+    @ColumnInfo(name = "password")
     private String password;
 
     // --- Constructors ---
@@ -25,7 +43,7 @@ public class Staff {
         // Room requires a no-arg constructor
     }
 
-    @Ignore   //  tell Room to ignore this constructor
+    @Ignore
     public Staff(String firstName,
                  String lastName,
                  String employeeNumber,
@@ -47,8 +65,8 @@ public class Staff {
     }
 
     // --- Getters and setters ---
-    public long getId() { return id; }                 // ✅ updated to long
-    public void setId(long id) { this.id = id; }       // ✅ updated to long
+    public long getId() { return id; }
+    public void setId(long id) { this.id = id; }
 
     public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
@@ -81,6 +99,7 @@ public class Staff {
         return firstName + " " + lastName;
     }
 }
+
 
 
 

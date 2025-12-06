@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "4672ab6f2eda8b56ae4a6e0133f66131",
+    "identityHash": "8e92b9a787e778cb1d4d75c4c1ac6e0a",
     "entities": [
       {
         "tableName": "patients",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `gender` TEXT, `dateOfBirth` TEXT, `contactNumber` TEXT, `address` TEXT, `nhsNumber` TEXT, `email` TEXT, `password` TEXT, `role` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `gender` TEXT, `date_of_birth` TEXT, `contact_number` TEXT, `address` TEXT, `nhs_number` TEXT, `email` TEXT, `password` TEXT, `role` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -28,13 +28,13 @@
           },
           {
             "fieldPath": "dateOfBirth",
-            "columnName": "dateOfBirth",
+            "columnName": "date_of_birth",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "contactNumber",
-            "columnName": "contactNumber",
+            "columnName": "contact_number",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -46,7 +46,7 @@
           },
           {
             "fieldPath": "nhsNumber",
-            "columnName": "nhsNumber",
+            "columnName": "nhs_number",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -451,7 +451,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4672ab6f2eda8b56ae4a6e0133f66131')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8e92b9a787e778cb1d4d75c4c1ac6e0a')"
     ]
   }
 }
