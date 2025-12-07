@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/patientDetailsLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Patient Info Header -->
+    <TextView
+        android:id="@+id/tvPatientInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Patient Info"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:paddingBottom="12dp" />
+
+    <!-- Appointments Section -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Appointments"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:paddingBottom="8dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvAppointments"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scrollbars="vertical"
+        android:background="#f5f5f5"
+        android:padding="4dp" />
+
+    <!-- Vitals Section -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Vitals"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvVitals"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical"
+        android:background="#f5f5f5"
+        android:padding="4dp" />
+
+</LinearLayout>

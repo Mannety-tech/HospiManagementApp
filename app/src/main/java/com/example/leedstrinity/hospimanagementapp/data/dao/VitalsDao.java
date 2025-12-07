@@ -12,7 +12,6 @@ import com.example.leedstrinity.hospimanagementapp.data.entities.Vitals;
 import java.util.Date;
 import java.util.List;
 
-
 @Dao
 public interface VitalsDao {
 
@@ -24,7 +23,7 @@ public interface VitalsDao {
 
     // Get all vitals for a patient
     @Query("SELECT * FROM vitals WHERE patient_id = :patientId ORDER BY recorded_at DESC")
-    LiveData<List<Vitals>> getVitalsForPatient(int patientId);
+    LiveData<List<Vitals>> getVitalsForPatient(long patientId);
 
     // Get vitals between two dates
     @Query("SELECT * FROM vitals WHERE recorded_at BETWEEN :start AND :end ORDER BY recorded_at ASC")
@@ -32,8 +31,9 @@ public interface VitalsDao {
 
     // Get the latest vitals for a patient
     @Query("SELECT * FROM vitals WHERE patient_id = :patientId ORDER BY recorded_at DESC LIMIT 1")
-    LiveData<Vitals> findLatestForPatient(int patientId);
+    LiveData<Vitals> findLatestForPatient(long patientId);
 }
+
 
 
 

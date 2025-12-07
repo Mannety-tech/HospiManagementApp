@@ -68,6 +68,14 @@
             android:layout_height="wrap_content"
             android:text="Open Vitals Page" />
 
+        <Button
+            android:id="@+id/btn_view_details"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:text="View Patient Details"
+            android:layout_marginTop="16dp"/>
+
+
 
         <Button
             android:id="@+id/btn_biometric_auth"

@@ -13,17 +13,23 @@ import com.example.leedstrinity.hospimanagementapp.R;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Vitals;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class VitalsAdapter extends RecyclerView.Adapter<VitalsAdapter.VitalsViewHolder> {
 
-    private final List<Vitals> vitalsList;
+    private final List<Vitals> vitalsList = new ArrayList<>();
     private final SimpleDateFormat dateFormat =
             new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
 
-    public VitalsAdapter(List<Vitals> vitalsList) {
-        this.vitalsList = vitalsList;
+    // --- Update method for LiveData observer ---
+    public void setVitals(List<Vitals> newVitals) {
+        vitalsList.clear();
+        if (newVitals != null) {
+            vitalsList.addAll(newVitals);
+        }
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -45,15 +51,14 @@ public class VitalsAdapter extends RecyclerView.Adapter<VitalsAdapter.VitalsView
 
         holder.tvRecordedAt.setText("Recorded: " + recordedAt);
         holder.tvHeartRate.setText("Heart Rate: " + vitals.getHeartRate() + " bpm");
-        holder.tvBloodPressure.setText("Blood Pressure: "
-                + vitals.getSystolicBP() + "/" + vitals.getDiastolicBP() + " mmHg");
+        holder.tvBloodPressure.setText("Blood Pressure: " + vitals.getBloodPressure() + " mmHg");
         holder.tvTemperature.setText("Temperature: " + vitals.getTemperature() + " °C");
-        holder.tvRespRate.setText("Respiratory Rate: " + vitals.getRespiratoryRate() + " breaths/min");
+        holder.tvOxygenLevel.setText("Oxygen Level: " + vitals.getOxygenLevel() + "%");
 
         // --- Highlight the latest vitals entry (first item) ---
         if (position == 0) {
             holder.itemView.setBackgroundColor(Color.parseColor("#FFF9C4")); // light yellow
-            holder.tvRecordedAt.setTextColor(Color.parseColor("#D32F2F")); // red for emphasis
+            holder.tvRecordedAt.setTextColor(Color.parseColor("#D32F2F"));   // red for emphasis
             holder.tvRecordedAt.setText(holder.tvRecordedAt.getText() + " (Latest)");
         } else {
             holder.itemView.setBackgroundColor(Color.WHITE);
@@ -63,18 +68,11 @@ public class VitalsAdapter extends RecyclerView.Adapter<VitalsAdapter.VitalsView
 
     @Override
     public int getItemCount() {
-        return vitalsList != null ? vitalsList.size() : 0;
-    }
-
-    // Update method for LiveData observer
-    public void updateVitals(List<Vitals> newVitals) {
-        vitalsList.clear();
-        vitalsList.addAll(newVitals);
-        notifyDataSetChanged();
+        return vitalsList.size();
     }
 
     static class VitalsViewHolder extends RecyclerView.ViewHolder {
-        TextView tvRecordedAt, tvHeartRate, tvBloodPressure, tvTemperature, tvRespRate;
+        TextView tvRecordedAt, tvHeartRate, tvBloodPressure, tvTemperature, tvOxygenLevel;
 
         VitalsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -82,10 +80,11 @@ public class VitalsAdapter extends RecyclerView.Adapter<VitalsAdapter.VitalsView
             tvHeartRate = itemView.findViewById(R.id.tvHeartRate);
             tvBloodPressure = itemView.findViewById(R.id.tvBloodPressure);
             tvTemperature = itemView.findViewById(R.id.tvTemperature);
-            tvRespRate = itemView.findViewById(R.id.tvRespRate);
+            tvOxygenLevel = itemView.findViewById(R.id.tvOxygenLevel);
         }
     }
 }
+
 
 
 

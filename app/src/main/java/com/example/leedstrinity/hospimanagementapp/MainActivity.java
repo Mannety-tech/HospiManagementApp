@@ -146,8 +146,27 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         });
+
+        // --- View Details button (fetch latest patient dynamically) ---
+        findViewById(R.id.btn_view_details).setOnClickListener(v -> {
+            Executors.newSingleThreadExecutor().execute(() -> {
+                List<Patient> patients = db.patientDao().getAllPatientsSync();
+                if (patients != null && !patients.isEmpty()) {
+                    Patient latestPatient = patients.get(patients.size() - 1);
+                    runOnUiThread(() -> {
+                        Intent detailsIntent = new Intent(MainActivity.this, PatientDetailsActivity.class);
+                        detailsIntent.putExtra("patientId", latestPatient.getId());
+                        startActivity(detailsIntent);
+                    });
+                } else {
+                    runOnUiThread(() ->
+                            Toast.makeText(MainActivity.this, "No patients found", Toast.LENGTH_SHORT).show());
+                }
+            });
+        });
     }
 }
+
 
 
 

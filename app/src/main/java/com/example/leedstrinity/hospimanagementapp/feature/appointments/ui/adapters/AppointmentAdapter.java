@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.leedstrinity.hospimanagementapp.R;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.ViewHolder> {
@@ -19,12 +20,23 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         void onItemClick(Appointment appointment);
     }
 
-    private final List<Appointment> appointments;
+    private List<Appointment> appointments = new ArrayList<>();
     private final OnItemClickListener listener;
 
-    public AppointmentAdapter(List<Appointment> appointments, OnItemClickListener listener) {
-        this.appointments = appointments;
+    // Constructor with listener
+    public AppointmentAdapter(OnItemClickListener listener) {
         this.listener = listener;
+    }
+
+    // No-arg constructor (listener optional)
+    public AppointmentAdapter() {
+        this.listener = null;
+    }
+
+    // Allow updating the list dynamically
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments != null ? appointments : new ArrayList<>();
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -46,21 +58,32 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         return appointments.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvPatientName;
+        private final TextView tvReason;
+        private final TextView tvDate;
 
         public ViewHolder(View itemView) {
             super(itemView);
             tvPatientName = itemView.findViewById(R.id.tvPatient);
+            tvReason = itemView.findViewById(R.id.tvReason);
+            tvDate = itemView.findViewById(R.id.tvDate);
         }
 
         public void bind(Appointment appointment, OnItemClickListener listener) {
             tvPatientName.setText(appointment.getPatientName());
+            tvReason.setText(appointment.getReason());
+            tvDate.setText(appointment.getDate());
 
-
-            itemView.setOnClickListener(v -> listener.onItemClick(appointment));
+            if (listener != null) {
+                itemView.setOnClickListener(v -> listener.onItemClick(appointment));
+            } else {
+                itemView.setOnClickListener(null);
+            }
         }
     }
 }
+
+
 
 

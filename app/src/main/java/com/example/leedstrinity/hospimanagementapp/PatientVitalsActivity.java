@@ -12,16 +12,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.leedstrinity.hospimanagementapp.R;
 import com.example.leedstrinity.hospimanagementapp.feature.appointments.ui.VitalsViewModel;
 import com.example.leedstrinity.hospimanagementapp.feature.appointments.ui.adapters.VitalsAdapter;
 
-import java.util.ArrayList;
-
 public class PatientVitalsActivity extends AppCompatActivity {
 
-    private VitalsViewModel vitalsViewModel;
     private VitalsAdapter vitalsAdapter;
-    private int patientId;
+    private VitalsViewModel vitalsViewModel;
+    private long patientId;
 
     private TextView tvPatientName;
     private Button btnAddVitals;
@@ -32,7 +31,7 @@ public class PatientVitalsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_patient_vitals);
 
         // --- Get patientId from Intent ---
-        patientId = getIntent().getIntExtra("patientId", -1);
+        patientId = getIntent().getLongExtra("patientId", -1);
         if (patientId == -1) {
             Toast.makeText(this, "No patient ID provided", Toast.LENGTH_SHORT).show();
             finish();
@@ -44,9 +43,9 @@ public class PatientVitalsActivity extends AppCompatActivity {
         tvPatientName.setText("Patient ID: " + patientId);
 
         // --- Setup RecyclerView ---
-        RecyclerView recyclerView = findViewById(R.id.vitalsRecyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerVitals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        vitalsAdapter = new VitalsAdapter(new ArrayList<>());
+        vitalsAdapter = new VitalsAdapter();
         recyclerView.setAdapter(vitalsAdapter);
 
         // --- Init ViewModel ---
@@ -55,7 +54,7 @@ public class PatientVitalsActivity extends AppCompatActivity {
         // --- Observe vitals for this patient ---
         vitalsViewModel.getVitalsForPatient(patientId).observe(this, vitalsList -> {
             if (vitalsList != null && !vitalsList.isEmpty()) {
-                vitalsAdapter.updateVitals(vitalsList);
+                vitalsAdapter.setVitals(vitalsList);
             } else {
                 Toast.makeText(this, "No vitals recorded for patient ID " + patientId, Toast.LENGTH_SHORT).show();
             }
@@ -70,4 +69,5 @@ public class PatientVitalsActivity extends AppCompatActivity {
         });
     }
 }
+
 

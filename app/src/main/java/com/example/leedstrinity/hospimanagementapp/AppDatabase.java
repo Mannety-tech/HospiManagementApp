@@ -38,7 +38,7 @@ import java.util.concurrent.Executors;
                 ClinicalRecord.class,
                 Appointment.class
         },
-        version = 8,   // ⬅️ bumped version to reflect latest schema changes
+        version = 12,
         exportSchema = true
 )
 @TypeConverters({Converters.class})
@@ -69,9 +69,7 @@ public abstract class AppDatabase extends RoomDatabase {
                                     AppDatabase.class,
                                     "hospital_db"
                             )
-                            // Dev shortcut: wipes DB if schema changes
                             .fallbackToDestructiveMigration()
-                            // Optional: pre-populate demo data
                             .addCallback(new RoomDatabase.Callback() {
                                 @Override
                                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
@@ -88,8 +86,9 @@ public abstract class AppDatabase extends RoomDatabase {
                                                 "Neurology", "Doctor", "Clinic B",
                                                 "07987654321", "bob@hospital.com", "pass123"
                                         );
-                                        getInstance(context).staffDao().insert(cardiology);
-                                        getInstance(context).staffDao().insert(neurology);
+                                        // Use INSTANCE directly (already built)
+                                        INSTANCE.staffDao().insert(cardiology);
+                                        INSTANCE.staffDao().insert(neurology);
                                     });
                                 }
                             })
@@ -100,6 +99,7 @@ public abstract class AppDatabase extends RoomDatabase {
         return INSTANCE;
     }
 }
+
 
 
 

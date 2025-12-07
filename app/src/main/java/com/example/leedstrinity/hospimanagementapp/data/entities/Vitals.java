@@ -10,63 +10,79 @@ import java.util.Date;
 public class Vitals {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
-    @ColumnInfo(name = "patient_id", index = true)
-    private int patientId;
+    @ColumnInfo(name = "patient_id")
+    private long patientId;
 
+    @ColumnInfo(name = "blood_pressure")
+    private String bloodPressure;
+
+    @ColumnInfo(name = "heart_rate")
     private int heartRate;
-    private int systolicBP;
-    private int diastolicBP;
+
+    @ColumnInfo(name = "temperature")
     private double temperature;
-    private int respiratoryRate;
+
+    @ColumnInfo(name = "oxygen_level")
+    private int oxygenLevel;
 
     @ColumnInfo(name = "recorded_at")
     private Date recordedAt;
 
-    // --- Getters and setters ---
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    // --- Constructors ---
+    public Vitals() {}
 
-    public int getPatientId() { return patientId; }
-    public void setPatientId(int patientId) { this.patientId = patientId; }
+    public Vitals(long patientId,
+                  String bloodPressure,
+                  int heartRate,
+                  double temperature,
+                  int oxygenLevel,
+                  Date recordedAt) {
+        this.patientId = patientId;
+        this.bloodPressure = bloodPressure;
+        this.heartRate = heartRate;
+        this.temperature = temperature;
+        this.oxygenLevel = oxygenLevel;
+        this.recordedAt = recordedAt;
+    }
+
+    // --- Static factory method ---
+    public static Vitals forPatient(long patientId,
+                                    int systolic,
+                                    int diastolic,
+                                    int heartRate,
+                                    double temperature,
+                                    int oxygenLevel) {
+        String bp = systolic + "/" + diastolic;
+        Date now = new Date();
+        return new Vitals(patientId, bp, heartRate, temperature, oxygenLevel, now);
+    }
+
+    // --- Getters and setters ---
+    public long getId() { return id; }
+    public void setId(long id) { this.id = id; }
+
+    public long getPatientId() { return patientId; }
+    public void setPatientId(long patientId) { this.patientId = patientId; }
+
+    public String getBloodPressure() { return bloodPressure; }
+    public void setBloodPressure(String bloodPressure) { this.bloodPressure = bloodPressure; }
 
     public int getHeartRate() { return heartRate; }
     public void setHeartRate(int heartRate) { this.heartRate = heartRate; }
 
-    public int getSystolicBP() { return systolicBP; }
-    public void setSystolicBP(int systolicBP) { this.systolicBP = systolicBP; }
-
-    public int getDiastolicBP() { return diastolicBP; }
-    public void setDiastolicBP(int diastolicBP) { this.diastolicBP = diastolicBP; }
-
     public double getTemperature() { return temperature; }
     public void setTemperature(double temperature) { this.temperature = temperature; }
 
-    public int getRespiratoryRate() { return respiratoryRate; }
-    public void setRespiratoryRate(int respiratoryRate) { this.respiratoryRate = respiratoryRate; }
+    public int getOxygenLevel() { return oxygenLevel; }
+    public void setOxygenLevel(int oxygenLevel) { this.oxygenLevel = oxygenLevel; }
 
     public Date getRecordedAt() { return recordedAt; }
     public void setRecordedAt(Date recordedAt) { this.recordedAt = recordedAt; }
-
-    // --- Factory method ---
-    public static Vitals forPatient(int patientId,
-                                    int heartRate,
-                                    int systolicBP,
-                                    int diastolicBP,
-                                    double temperature,
-                                    int respiratoryRate) {
-        Vitals vitals = new Vitals();
-        vitals.setPatientId(patientId);
-        vitals.setHeartRate(heartRate);
-        vitals.setSystolicBP(systolicBP);
-        vitals.setDiastolicBP(diastolicBP);
-        vitals.setTemperature(temperature);
-        vitals.setRespiratoryRate(respiratoryRate);
-        vitals.setRecordedAt(new Date()); // capture current time
-        return vitals;
-    }
 }
+
+
 
 
 

@@ -26,9 +26,7 @@ public class AppointmentRepository {
         this.api = new ApiClient(context);
     }
 
-    /**
-     * Fetch today's appointments from API, insert into local DB, and return appointments between start and end.
-     */
+
     public LiveData<List<Appointment>> getTodaysAppointments(String clinic, long start, long end) {
         List<Appointment> mapped = new ArrayList<>();
 
@@ -49,16 +47,12 @@ public class AppointmentRepository {
 
         } catch (IOException e) {
             e.printStackTrace();
-            // Optionally log or handle error
         }
 
         // Return reactive query
         return dao.findBetween(start, end);
     }
 
-    /**
-     * Book or reschedule an appointment via API and update local DB.
-     */
     public Appointment bookOrReschedule(Appointment appt) {
         Appointment saved = null;
 
@@ -67,7 +61,7 @@ public class AppointmentRepository {
             dto.setId(appt.getId());
             dto.setPatientName(appt.getPatientName());
             dto.setDate(appt.getDate());
-            dto.setTime(appt.getTime());
+            // Removed dto.setTime(appt.getTime());
             dto.setReason(appt.getReason());
             dto.setSpecialistName(appt.getSpecialistName());
             dto.setClinicLocation(appt.getClinicLocation());
@@ -81,7 +75,6 @@ public class AppointmentRepository {
             if (response.isSuccessful() && response.body() != null) {
                 saved = map(response.body());
 
-                // Preserve ID if API didn’t return one
                 if (saved.getId() == 0) {
                     saved.setId(appt.getId());
                 }
@@ -103,22 +96,18 @@ public class AppointmentRepository {
         return saved;
     }
 
-    /**
-     * Detect overlapping appointments for a given specialist.
-     */
+
     public LiveData<List<Appointment>> detectConflicts(String specialistName, long start, long end) {
         return dao.overlappingByName(specialistName, start, end);
     }
 
-    /**
-     * Map AppointmentDto (from API) into Appointment entity (for Room).
-     */
+
     private Appointment map(AppointmentDto dto) {
         Appointment appointment = new Appointment();
 
         appointment.setPatientName(dto.getPatientName());
         appointment.setDate(dto.getDate());
-        appointment.setTime(dto.getTime());
+        // Removed appointment.setTime(dto.getTime());
         appointment.setReason(dto.getReason());
         appointment.setSpecialistName(dto.getSpecialistName());
         appointment.setClinicLocation(dto.getClinicLocation());
@@ -133,6 +122,7 @@ public class AppointmentRepository {
         return appointment;
     }
 }
+
 
 
 

@@ -24,13 +24,16 @@ public interface PatientDao {
     @Query("SELECT * FROM patients")
     List<Patient> getAllPatientsSync();
 
+    @Query("SELECT * FROM patients WHERE id = :patientId LIMIT 1")
+    Patient findById(long patientId);
+
     // --- Fetch all patients as LiveData (for UI observation) ---
     @Query("SELECT * FROM patients ORDER BY name ASC")
     LiveData<List<Patient>> getAllPatients();
 
     // --- Find patient by ID ---
     @Query("SELECT * FROM patients WHERE id = :id LIMIT 1")
-    LiveData<Patient> findPatientById(int id);
+    LiveData<Patient> findPatientById(long id);
 
     // --- Delete all patients ---
     @Query("DELETE FROM patients")
@@ -44,6 +47,7 @@ public interface PatientDao {
     @Query("SELECT * FROM patients ORDER BY id DESC LIMIT 1")
     Patient getLatestPatient();
 }
+
 
 
 

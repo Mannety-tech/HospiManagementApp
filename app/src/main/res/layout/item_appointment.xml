@@ -3,38 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="12dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:padding="8dp">
 
-    <!-- 🧑 Patient NHS Number -->
     <TextView
         android:id="@+id/tvPatient"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="NHS: xxxxxxxxxx"
+        android:text="Patient Name"
         android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="?android:textColorPrimary" />
+        android:textSize="16sp" />
 
-    <!-- 🩺 Clinician and Clinic Info -->
     <TextView
-        android:id="@+id/tvClinician"
+        android:id="@+id/tvReason"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Dr. Smith — Clinic A"
-        android:textSize="14sp"
-        android:layout_marginTop="4dp"
-        android:textColor="?android:textColorSecondary" />
+        android:text="Reason"
+        android:textSize="14sp" />
 
-    <!-- ⏰ Appointment Time -->
     <TextView
-        android:id="@+id/tvTime"
+        android:id="@+id/tvDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="01 Jan 2025 09:00 → 09:20"
-        android:textSize="14sp"
-        android:layout_marginTop="2dp"
-        android:textColor="?android:textColorSecondary" />
+        android:text="Date"
+        android:textSize="14sp" />
 </LinearLayout>
+
+
 
 

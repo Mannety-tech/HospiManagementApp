@@ -45,6 +45,7 @@
         <activity android:name=".LoginActivity" android:exported="true" />
         <activity android:name=".PatientVitalsActivity" android:exported="true" />
         <activity android:name=".RecordVitalActivity" android:exported="true" />
+        <activity android:name=".PatientDetailsActivity" android:exported="true" />
 
         <!-- Admin flow -->
         <activity android:name=".AdminLoginActivity" android:exported="false" />
@@ -58,14 +59,16 @@
 
         <!-- Biometric / session -->
         <activity android:name=".BiometricAuthActivity" android:exported="false" />
-        <activity android:name=".feature.session.ClearSessionActivity" android:exported="false" />
+        <!-- Ensure ClearSessionActivity path matches your actual package -->
+        <activity android:name=".ClearSessionActivity" android:exported="false" />
 
         <!-- Optional appointment feature module -->
+        <!-- Remove if you only use BookingFragment -->
         <activity android:name=".feature.appointments.ui.BookingActivity" android:exported="false" />
 
     </application>
-
 </manifest>
+
 
 
 
