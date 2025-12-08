@@ -2,90 +2,28 @@ package com.example.leedstrinity.hospimanagementapp.data.entities;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.room.ColumnInfo;
 
-@Entity(tableName = "appointment")
+import com.example.leedstrinity.hospimanagementapp.security.auth.SecureDatabaseHelper;
+
+@Entity(tableName = "appointments")
 public class Appointment {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
 
-    @ColumnInfo(name = "patient_id")
     private long patientId;
-
-    @ColumnInfo(name = "patient_name")
     private String patientName;
-
-    @ColumnInfo(name = "clinician_name")
     private String clinicianName;
-
-    @ColumnInfo(name = "clinic_location")
     private String clinicLocation;
 
-    @ColumnInfo(name = "reason")
+    // Store encrypted reason in DB
     private String reason;
 
-    @ColumnInfo(name = "status")
-    private String status; // e.g. BOOKED, COMPLETED, CANCELLED
-
-    @ColumnInfo(name = "date")
-    private String date;   // e.g. "06/12/2025"
-
-    @ColumnInfo(name = "start_time")
+    private String status;
+    private String date;
     private long startTimeMillis;
-
-    @ColumnInfo(name = "end_time")
     private long endTimeMillis;
-
-    @ColumnInfo(name = "specialist_name")
     private String specialistName;
-
-    // --- Default constructor ---
-    public Appointment() {}
-
-    // --- Full constructor (with patientId) ---
-    public Appointment(long patientId,
-                       String patientName,
-                       String clinicianName,
-                       String clinicLocation,
-                       String reason,
-                       String status,
-                       String date,
-                       long startTimeMillis,
-                       long endTimeMillis,
-                       String specialistName) {
-        this.patientId = patientId;
-        this.patientName = patientName;
-        this.clinicianName = clinicianName;
-        this.clinicLocation = clinicLocation;
-        this.reason = reason;
-        this.status = status;
-        this.date = date;
-        this.startTimeMillis = startTimeMillis;
-        this.endTimeMillis = endTimeMillis;
-        this.specialistName = specialistName;
-    }
-
-    // --- Convenience constructor (for UI entry without patientId) ---
-    public Appointment(String patientName,
-                       String date,
-                       String time, // optional raw time string from UI
-                       String reason,
-                       String specialistName,
-                       long startTimeMillis,
-                       long endTimeMillis,
-                       String clinicLocation,
-                       String status) {
-        this.patientName = patientName;
-        this.date = date;
-        this.reason = reason;
-        this.specialistName = specialistName;
-        this.startTimeMillis = startTimeMillis;
-        this.endTimeMillis = endTimeMillis;
-        this.clinicLocation = clinicLocation;
-        this.status = status;
-        // `time` can be stored separately if needed, or ignored if you rely on millis
-    }
 
     // --- Getters and setters ---
     public long getId() { return id; }
@@ -103,8 +41,14 @@ public class Appointment {
     public String getClinicLocation() { return clinicLocation; }
     public void setClinicLocation(String clinicLocation) { this.clinicLocation = clinicLocation; }
 
-    public String getReason() { return reason; }
-    public void setReason(String reason) { this.reason = reason; }
+    // ✅ Automatically encrypt/decrypt reason
+    public String getReason() {
+        return SecureDatabaseHelper.decrypt(reason);
+    }
+
+    public void setReason(String reasonPlainText) {
+        this.reason = SecureDatabaseHelper.encrypt(reasonPlainText);
+    }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
@@ -121,6 +65,9 @@ public class Appointment {
     public String getSpecialistName() { return specialistName; }
     public void setSpecialistName(String specialistName) { this.specialistName = specialistName; }
 }
+
+
+
 
 
 

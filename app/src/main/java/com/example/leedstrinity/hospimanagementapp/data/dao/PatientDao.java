@@ -2,6 +2,7 @@ package com.example.leedstrinity.hospimanagementapp.data.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -20,20 +21,24 @@ public interface PatientDao {
     @Update
     void update(Patient patient);
 
-    // --- Fetch all patients synchronously (for background threads) ---
+    @Delete
+    void delete(Patient patient);
+
+    // --- Fetch all patients synchronously ---
     @Query("SELECT * FROM patients")
     List<Patient> getAllPatientsSync();
 
+    // --- Find patient by ID (sync) ---
     @Query("SELECT * FROM patients WHERE id = :patientId LIMIT 1")
-    Patient findById(long patientId);
+    Patient findByIdSync(long patientId);
 
-    // --- Fetch all patients as LiveData (for UI observation) ---
+    // --- Find patient by ID (LiveData) ---
+    @Query("SELECT * FROM patients WHERE id = :patientId LIMIT 1")
+    LiveData<Patient> findByIdLive(long patientId);
+
+    // --- Fetch all patients as LiveData ---
     @Query("SELECT * FROM patients ORDER BY name ASC")
     LiveData<List<Patient>> getAllPatients();
-
-    // --- Find patient by ID ---
-    @Query("SELECT * FROM patients WHERE id = :id LIMIT 1")
-    LiveData<Patient> findPatientById(long id);
 
     // --- Delete all patients ---
     @Query("DELETE FROM patients")
@@ -43,10 +48,11 @@ public interface PatientDao {
     @Query("SELECT * FROM patients WHERE email = :email AND password = :password LIMIT 1")
     Patient login(String email, String password);
 
-    // --- Fetch the latest patient directly ---
+    // --- Fetch the latest patient ---
     @Query("SELECT * FROM patients ORDER BY id DESC LIMIT 1")
     Patient getLatestPatient();
 }
+
 
 
 

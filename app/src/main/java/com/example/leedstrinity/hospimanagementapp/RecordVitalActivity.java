@@ -6,17 +6,17 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import com.example.leedstrinity.hospimanagementapp.data.entities.Vitals;
 
+import java.util.Date;
 import java.util.concurrent.Executors;
 
 public class RecordVitalActivity extends AppCompatActivity {
 
     private EditText heartRateEditText, systolicEditText, diastolicEditText,
             temperatureEditText, respRateEditText;
-    private int patientId;
+    private long patientId;   // use long to match entity
     private AppDatabase db;
 
     @Override
@@ -24,17 +24,17 @@ public class RecordVitalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_vitals);
 
-        // --- Get patientId as int ---
-        patientId = getIntent().getIntExtra("patientId", -1);
+        // --- Get patientId ---
+        patientId = getIntent().getLongExtra("patientId", -1);
         if (patientId == -1) {
             Toast.makeText(this, "No patient ID provided", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "hospital_db").build();
+        db = AppDatabase.getInstance(getApplicationContext());
 
+        // --- Bind views ---
         heartRateEditText = findViewById(R.id.editTextHeartRate);
         systolicEditText = findViewById(R.id.editTextSystolic);
         diastolicEditText = findViewById(R.id.editTextDiastolic);
@@ -51,14 +51,20 @@ public class RecordVitalActivity extends AppCompatActivity {
             double temperature = Double.parseDouble(temperatureEditText.getText().toString().trim());
             int respRate = Integer.parseInt(respRateEditText.getText().toString().trim());
 
-            //  Use factory method or setters
-            Vitals vitals = Vitals.forPatient(patientId, heartRate, systolic, diastolic, temperature, respRate);
+            //  Build Vitals object with setters
+            Vitals vitals = new Vitals();
+            vitals.setPatientId(patientId);
+            vitals.setBloodPressure(systolic + "/" + diastolic);
+            vitals.setHeartRate(String.valueOf(heartRate));
+            vitals.setTemperature(String.valueOf(temperature));
+            vitals.setOxygenLevel(String.valueOf(respRate));
+            vitals.setRecordedAt(new Date()); // store as Date, handled by TypeConverter
 
             Executors.newSingleThreadExecutor().execute(() -> {
                 db.vitalsDao().insert(vitals);
                 runOnUiThread(() -> {
                     Toast.makeText(this, "Vitals recorded successfully", Toast.LENGTH_SHORT).show();
-                    finish(); // return to VitalsActivity
+                    finish(); // return to PatientVitalsActivity or Dashboard
                 });
             });
         });
@@ -102,5 +108,7 @@ public class RecordVitalActivity extends AppCompatActivity {
         return true;
     }
 }
+
+
 
 

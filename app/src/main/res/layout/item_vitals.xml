@@ -1,27 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:padding="12dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView android:id="@+id/tvDate"
+    <TextView
+        android:id="@+id/tvBP"
+        android:text="BP:"
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <TextView android:id="@+id/tvClinic"
+    <TextView
+        android:id="@+id/tvHR"
+        android:text="HR:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <TextView android:id="@+id/tvSpecialist"
+    <TextView
+        android:id="@+id/tvTemp"
+        android:text="Temp:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <TextView android:id="@+id/tvStatus"
+    <TextView
+        android:id="@+id/tvOxygen"
+        android:text="O2:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <TextView android:id="@+id/tvReason"
+    <TextView
+        android:id="@+id/tvRecorded"
+        android:text="Recorded:"
+        android:textStyle="italic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 </LinearLayout>

@@ -1,32 +1,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:padding="12dp"
+    android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
-    <TextView android:id="@+id/tvDate"
-        android:textStyle="bold"
+    <TextView android:id="@+id/tvBPDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <TextView android:id="@+id/tvClinic"
+    <TextView android:id="@+id/tvHRDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <TextView android:id="@+id/tvSpecialist"
+    <TextView android:id="@+id/tvTempDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <TextView android:id="@+id/tvStatus"
+    <TextView android:id="@+id/tvOxygenDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <TextView android:id="@+id/tvReason"
+    <TextView android:id="@+id/tvRecordedDetail"
+        android:textStyle="italic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 </LinearLayout>
-
-
-
-
-

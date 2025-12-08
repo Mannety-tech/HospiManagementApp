@@ -24,6 +24,8 @@ import java.util.concurrent.Executors;
 public class MainActivity extends AppCompatActivity {
 
     private AppDatabase db;
+    private long patientId = -1; // current patient ID
+    private String staffName, staffEmail, employeeNumber, specialty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,24 +45,19 @@ public class MainActivity extends AppCompatActivity {
             manager.createNotificationChannel(channel);
         }
 
-        // --- Redirect staff from signup directly to AdminPortalActivity ---
+        // --- Get extras from LoginActivity ---
         Intent intent = getIntent();
         if (intent.hasExtra("staffEmail")) {
-            String staffName = intent.getStringExtra("staffName");
-            String staffEmail = intent.getStringExtra("staffEmail");
-            String empNo = intent.getStringExtra("employeeNumber");
-            String specialty = intent.getStringExtra("specialty");
+            staffName = intent.getStringExtra("staffName");
+            staffEmail = intent.getStringExtra("staffEmail");
+            employeeNumber = intent.getStringExtra("employeeNumber");
+            specialty = intent.getStringExtra("specialty");
 
             Toast.makeText(this, "Welcome " + staffName + " (" + specialty + ")", Toast.LENGTH_LONG).show();
-
-            Intent adminIntent = new Intent(MainActivity.this, AdminPortalActivity.class);
-            adminIntent.putExtra("staffName", staffName);
-            adminIntent.putExtra("staffEmail", staffEmail);
-            adminIntent.putExtra("employeeNumber", empNo);
-            adminIntent.putExtra("specialty", specialty);
-            startActivity(adminIntent);
-            finish();
-            return;
+        } else if (intent.hasExtra("patientId")) {
+            patientId = intent.getLongExtra("patientId", -1);
+            String patientName = intent.getStringExtra("patientName");
+            Toast.makeText(this, "Welcome " + patientName, Toast.LENGTH_LONG).show();
         }
 
         // --- Initialize Room database ---
@@ -129,15 +126,16 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_patient_dashboard).setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, PatientDashboardActivity.class)));
 
-        // --- Vitals Page button (fetch latest patient dynamically) ---
+        // --- Record New Vitals button ---
         findViewById(R.id.btn_vitals_page).setOnClickListener(v -> {
             Executors.newSingleThreadExecutor().execute(() -> {
                 List<Patient> patients = db.patientDao().getAllPatientsSync();
                 if (patients != null && !patients.isEmpty()) {
                     Patient latestPatient = patients.get(patients.size() - 1);
+                    patientId = latestPatient.getId();
                     runOnUiThread(() -> {
-                        Intent vitalsIntent = new Intent(MainActivity.this, PatientVitalsActivity.class);
-                        vitalsIntent.putExtra("patientId", latestPatient.getId());
+                        Intent vitalsIntent = new Intent(MainActivity.this, RecordVitalActivity.class);
+                        vitalsIntent.putExtra("patientId", patientId);
                         startActivity(vitalsIntent);
                     });
                 } else {
@@ -147,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             });
         });
 
-        // --- View Details button (fetch latest patient dynamically) ---
+        // --- View Details button ---
         findViewById(R.id.btn_view_details).setOnClickListener(v -> {
             Executors.newSingleThreadExecutor().execute(() -> {
                 List<Patient> patients = db.patientDao().getAllPatientsSync();
@@ -166,6 +164,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 }
+
+
+
 
 
 

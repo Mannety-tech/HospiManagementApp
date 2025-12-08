@@ -3,7 +3,6 @@ package com.example.leedstrinity.hospimanagementapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,9 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.leedstrinity.hospimanagementapp.data.entities.Patient;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Staff;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -52,24 +48,24 @@ public class SignupActivity extends AppCompatActivity {
         // --- Back button ---
         btnBack.setOnClickListener(v -> finish());
 
-        // --- Initialize spinners with defaults from strings.xml ---
-        ArrayAdapter<CharSequence> defaultSpecialtyAdapter = ArrayAdapter.createFromResource(
+        // --- Initialize spinners with arrays from strings.xml ---
+        ArrayAdapter<CharSequence> specialtyAdapter = ArrayAdapter.createFromResource(
                 this,
                 R.array.specialties_array,
                 android.R.layout.simple_spinner_item
         );
-        defaultSpecialtyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spSpecialty.setAdapter(defaultSpecialtyAdapter);
+        specialtyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spSpecialty.setAdapter(specialtyAdapter);
 
-        ArrayAdapter<CharSequence> defaultClinicAdapter = ArrayAdapter.createFromResource(
+        ArrayAdapter<CharSequence> clinicAdapter = ArrayAdapter.createFromResource(
                 this,
                 R.array.clinic_locations,
                 android.R.layout.simple_spinner_item
         );
-        defaultClinicAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spClinic.setAdapter(defaultClinicAdapter);
+        clinicAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spClinic.setAdapter(clinicAdapter);
 
-        // --- Toggle visibility ---
+        // --- Toggle visibility based on role ---
         rbPatient.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 etNhsNumber.setVisibility(View.VISIBLE);
@@ -86,50 +82,6 @@ public class SignupActivity extends AppCompatActivity {
                 spSpecialty.setVisibility(View.VISIBLE);
                 spClinic.setVisibility(View.VISIBLE);
             }
-        });
-
-        // --- Override specialties with DB values when available ---
-        db.staffDao().getAllSpecialtiesLive().observe(this, specialties -> {
-            if (specialties != null && !specialties.isEmpty()) {
-                List<String> merged = new ArrayList<>();
-                merged.add("Select specialty...");
-                merged.addAll(specialties);
-
-                ArrayAdapter<String> specialtyAdapter = new ArrayAdapter<>(
-                        SignupActivity.this,
-                        android.R.layout.simple_spinner_item,
-                        merged
-                );
-                specialtyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spSpecialty.setAdapter(specialtyAdapter);
-            }
-        });
-
-        // --- Override clinics when specialty changes ---
-        spSpecialty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedSpecialty = spSpecialty.getSelectedItem().toString();
-
-                db.staffDao().getClinicsBySpecialty(selectedSpecialty).observe(SignupActivity.this, clinicNames -> {
-                    if (clinicNames != null && !clinicNames.isEmpty()) {
-                        List<String> merged = new ArrayList<>();
-                        merged.add("Select clinic...");
-                        merged.addAll(clinicNames);
-
-                        ArrayAdapter<String> clinicAdapter = new ArrayAdapter<>(
-                                SignupActivity.this,
-                                android.R.layout.simple_spinner_item,
-                                merged
-                        );
-                        clinicAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spClinic.setAdapter(clinicAdapter);
-                    }
-                });
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) { }
         });
 
         // --- Signup button logic ---
@@ -216,6 +168,8 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 }
+
+
 
 
 

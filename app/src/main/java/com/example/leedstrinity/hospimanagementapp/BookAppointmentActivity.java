@@ -15,6 +15,7 @@ import androidx.room.Room;
 
 import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
 
+import java.util.Calendar;
 import java.util.concurrent.Executors;
 
 public class BookAppointmentActivity extends AppCompatActivity {
@@ -22,6 +23,10 @@ public class BookAppointmentActivity extends AppCompatActivity {
     private EditText patientNameEditText, dateEditText, timeEditText, reasonEditText;
     private Spinner specialtySpinner, specialistSpinner, clinicSpinner;
     private AppDatabase db;
+
+    // Patient details passed from PatientDashboardActivity
+    private long patientId;
+    private String patientName, patientEmail, nhsNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,39 +46,37 @@ public class BookAppointmentActivity extends AppCompatActivity {
         clinicSpinner = findViewById(R.id.spinnerClinicLocation);
 
         Button submitAppointmentButton = findViewById(R.id.buttonSubmitAppointment);
-        Button backToMainButton = findViewById(R.id.buttonBackToMain);
+        Button btnGoBack = findViewById(R.id.btnGoBack);
 
-        // --- Set up adapters from strings.xml ---
+        // --- Get patient details from intent ---
+        Intent intent = getIntent();
+        patientId = intent.getLongExtra("patientId", -1);
+        patientName = intent.getStringExtra("patientName");
+        patientEmail = intent.getStringExtra("patientEmail");
+        nhsNumber = intent.getStringExtra("nhsNumber");
+
+        // --- Set up adapters ---
         ArrayAdapter<CharSequence> specialtyAdapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.specialties_array,
-                android.R.layout.simple_spinner_item
-        );
+                this, R.array.specialties_array, android.R.layout.simple_spinner_item);
         specialtyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         specialtySpinner.setAdapter(specialtyAdapter);
 
         ArrayAdapter<CharSequence> specialistAdapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.specialists_array,
-                android.R.layout.simple_spinner_item
-        );
+                this, R.array.specialists_array, android.R.layout.simple_spinner_item);
         specialistAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         specialistSpinner.setAdapter(specialistAdapter);
 
         ArrayAdapter<CharSequence> clinicAdapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.clinic_locations,
-                android.R.layout.simple_spinner_item
-        );
+                this, R.array.clinic_locations, android.R.layout.simple_spinner_item);
         clinicAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         clinicSpinner.setAdapter(clinicAdapter);
 
         // --- Date picker ---
         dateEditText.setOnClickListener(v -> {
-            final java.util.Calendar calendar = java.util.Calendar.getInstance();
-            int year = calendar.get(java.util.Calendar.YEAR);
-            int month = calendar.get(java.util.Calendar.MONTH);
-            int day = calendar.get(java.util.Calendar.DAY_OF_MONTH);
+            final Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
 
             DatePickerDialog datePickerDialog = new DatePickerDialog(
                     BookAppointmentActivity.this,
@@ -88,9 +91,9 @@ public class BookAppointmentActivity extends AppCompatActivity {
 
         // --- Time picker ---
         timeEditText.setOnClickListener(v -> {
-            final java.util.Calendar calendar = java.util.Calendar.getInstance();
-            int hour = calendar.get(java.util.Calendar.HOUR_OF_DAY);
-            int minute = calendar.get(java.util.Calendar.MINUTE);
+            final Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
 
             TimePickerDialog timePickerDialog = new TimePickerDialog(
                     BookAppointmentActivity.this,
@@ -105,19 +108,16 @@ public class BookAppointmentActivity extends AppCompatActivity {
 
         // --- Submit appointment ---
         submitAppointmentButton.setOnClickListener(v -> {
-            String patientName = patientNameEditText.getText().toString().trim();
+            String patientNameInput = patientNameEditText.getText().toString().trim();
             String date = dateEditText.getText().toString().trim();
             String time = timeEditText.getText().toString().trim();
             String reason = reasonEditText.getText().toString().trim();
             String specialty = specialtySpinner.getSelectedItem() != null
-                    ? specialtySpinner.getSelectedItem().toString()
-                    : "";
+                    ? specialtySpinner.getSelectedItem().toString() : "";
             String specialistName = specialistSpinner.getSelectedItem() != null
-                    ? specialistSpinner.getSelectedItem().toString()
-                    : "";
+                    ? specialistSpinner.getSelectedItem().toString() : "";
             String clinicLocation = clinicSpinner.getSelectedItem() != null
-                    ? clinicSpinner.getSelectedItem().toString()
-                    : "";
+                    ? clinicSpinner.getSelectedItem().toString() : "";
 
             if (specialty.equals("Select specialty...") ||
                     specialistName.equals("Select specialist...") ||
@@ -126,28 +126,29 @@ public class BookAppointmentActivity extends AppCompatActivity {
                 return;
             }
 
-            if (patientName.isEmpty() || date.isEmpty() || time.isEmpty() || reason.isEmpty()) {
+            if (patientNameInput.isEmpty() || date.isEmpty() || time.isEmpty() || reason.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             } else {
                 long start = System.currentTimeMillis();
                 long end = start + 3600000; // 1 hour later
 
-                Appointment appointment = new Appointment(
-                        patientName,
-                        date,
-                        time,
-                        reason,
-                        specialistName,
-                        start,
-                        end,
-                        clinicLocation,
-                        "BOOKED"
-                );
+                // ✅ Use setters with no-arg constructor
+                Appointment appointment = new Appointment();
+                appointment.setPatientId(patientId);
+                appointment.setPatientName(patientNameInput);
+                appointment.setClinicianName(null);
+                appointment.setClinicLocation(clinicLocation);
+                appointment.setReason(reason);
+                appointment.setStatus("BOOKED");
+                appointment.setDate(date);
+                appointment.setStartTimeMillis(start);
+                appointment.setEndTimeMillis(end);
+                appointment.setSpecialistName(specialistName);
 
                 Executors.newSingleThreadExecutor().execute(() -> {
                     db.appointmentDao().insert(appointment);
                     runOnUiThread(() -> Toast.makeText(this,
-                            "Appointment saved for " + patientName +
+                            "Appointment saved for " + patientNameInput +
                                     " with " + specialistName +
                                     " (" + specialty + ") at " + clinicLocation,
                             Toast.LENGTH_LONG).show());
@@ -155,14 +156,21 @@ public class BookAppointmentActivity extends AppCompatActivity {
             }
         });
 
-        // --- Back button ---
-        backToMainButton.setOnClickListener(v -> {
-            Intent intent = new Intent(BookAppointmentActivity.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
+        // --- Go Back button ---
+        btnGoBack.setOnClickListener(v -> {
+            Intent backIntent = new Intent(BookAppointmentActivity.this, PatientDashboardActivity.class);
+            backIntent.putExtra("patientId", patientId);
+            backIntent.putExtra("patientName", patientName);
+            backIntent.putExtra("patientEmail", patientEmail);
+            backIntent.putExtra("nhsNumber", nhsNumber);
+            startActivity(backIntent);
+            finish();
         });
     }
 }
+
+
+
 
 
 

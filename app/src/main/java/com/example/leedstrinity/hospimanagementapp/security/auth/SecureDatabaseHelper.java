@@ -38,7 +38,7 @@ public class SecureDatabaseHelper {
         }
     }
 
-    // 👉 Decrypt cipher text
+    //  Decrypt cipher text
     public static String decrypt(String strToDecrypt) {
         try {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");

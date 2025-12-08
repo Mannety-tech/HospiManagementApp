@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -7,88 +8,128 @@
     android:layout_height="match_parent"
     tools:context="com.example.leedstrinity.hospimanagementapp.MainActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:fillViewport="true">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Welcome to HospiManagementApp!" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
+            <!-- Welcome text -->
+            <TextView
+                android:id="@+id/tvWelcome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Welcome to HospiManagementApp!"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="24dp"/>
 
-        <Button
-            android:id="@+id/btn_admin_portal"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:text="Admin Portal" />
+            <!-- Admin Portal -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_admin_portal"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Admin Portal"
+                android:layout_marginBottom="8dp"/>
 
-        <Button
-            android:id="@+id/btn_admin_login"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:text="Admin Login" />
+            <!-- Admin Login -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_admin_login"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Admin Login"
+                android:layout_marginBottom="8dp"/>
 
-        <Button
-            android:id="@+id/btn_register"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:text="Register Patient" />
+            <!-- Register Patient -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_register"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Register Patient"
+                android:layout_marginBottom="8dp"/>
 
+            <!-- Appointment -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_appointment"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Appointment"
+                android:layout_marginBottom="8dp"/>
 
-        <Button
-            android:id="@+id/btn_appointment"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:text="Appointment" />
+            <!-- Patient Record -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_patient_record"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Patient Record"
+                android:layout_marginBottom="8dp"/>
 
-        <Button
-            android:id="@+id/btn_patient_record"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:text="Patient Record" />
+            <!-- Clinical Record -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_clinical_record"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Clinical Record"
+                android:layout_marginBottom="8dp"/>
 
-        <Button
-            android:id="@+id/btn_clinical_record"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:text="Clinical Record" />
+            <!-- Patient Dashboard -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_patient_dashboard"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Patient Dashboard"
+                android:layout_marginBottom="8dp"/>
 
-        <Button
-            android:id="@+id/btn_patient_dashboard"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:text="Patient Dashboard" />
+            <!-- Record New Vitals -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_vitals_page"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=" Vitals Page"
+                android:layout_marginBottom="8dp"/>
 
-        <Button
-            android:id="@+id/btn_vitals_page"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:text="Open Vitals Page" />
+            <!-- View Patient Details -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_view_details"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="View Patient Details"
+                android:layout_marginBottom="16dp"/>
 
-        <Button
-            android:id="@+id/btn_view_details"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:text="View Patient Details"
-            android:layout_marginTop="16dp"/>
+            <!-- Biometric Authentication -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_biometric_auth"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Biometric Authentication"
+                android:layout_marginBottom="8dp"/>
 
-
-
-        <Button
-            android:id="@+id/btn_biometric_auth"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:text="Biometric Authentication"
-            android:layout_marginTop="16dp" />
-
-        <Button
-            android:id="@+id/btn_clear_session"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:text="Clear Session" />
-
-    </LinearLayout>
+            <!-- Clear Session -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_clear_session"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Clear Session"/>
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

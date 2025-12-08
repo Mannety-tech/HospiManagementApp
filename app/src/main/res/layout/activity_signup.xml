@@ -1,86 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="24dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <!-- Common fields -->
+        <!-- Full Name -->
         <EditText
             android:id="@+id/etName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Full Name" />
+            android:hint="Full Name"
+            android:inputType="textPersonName"/>
 
+        <!-- Email -->
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:layout_marginTop="8dp"/>
 
+        <!-- Password -->
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:layout_marginTop="8dp"/>
 
         <!-- Role selection -->
         <RadioGroup
             android:id="@+id/rgRole"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
 
             <RadioButton
                 android:id="@+id/rbPatient"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Patient"
-                android:checked="true" />
+                android:checked="true"/>
 
             <RadioButton
                 android:id="@+id/rbStaff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Staff" />
+                android:text="Staff"
+                android:layout_marginStart="16dp"/>
         </RadioGroup>
 
-        <!-- NHS Number field (for patients) -->
+        <!-- NHS Number (Patient only) -->
         <EditText
             android:id="@+id/etNhsNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="NHS Number"
             android:inputType="number"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:layout_marginTop="8dp"/>
 
-        <!-- Employee Number field (for staff) -->
+        <!-- Employee Number (Staff only) -->
         <EditText
             android:id="@+id/etEmployeeNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Employee Number"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:layout_marginTop="8dp"/>
 
-        <!-- Specialty spinner -->
+        <!-- Specialty spinner (Staff only) -->
+        <TextView
+            android:id="@+id/tvSpecialtyLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Specialty"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"/>
         <Spinner
             android:id="@+id/spSpecialty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
-        <!-- Clinic spinner -->
+        <!-- Clinic spinner (Staff only) -->
+        <TextView
+            android:id="@+id/tvClinicLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Clinic"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"/>
         <Spinner
             android:id="@+id/spClinic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <!-- Signup button -->
         <Button
@@ -88,7 +113,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sign Up"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"/>
 
         <!-- Back button -->
         <Button
@@ -96,10 +121,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Back"
-            android:layout_marginTop="8dp" />
-
+            android:layout_marginTop="8dp"/>
     </LinearLayout>
 </ScrollView>
+
+
+
 
 
 

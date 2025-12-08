@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 12,
-    "identityHash": "5deb79992239f4887a9ab11bba49c5cb",
+    "identityHash": "62175b23fc436461e79bd1ab75c2cc49",
     "entities": [
       {
         "tableName": "patients",
@@ -154,7 +154,7 @@
       },
       {
         "tableName": "vitals",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `patient_id` INTEGER NOT NULL, `blood_pressure` TEXT, `heart_rate` INTEGER NOT NULL, `temperature` REAL NOT NULL, `oxygen_level` INTEGER NOT NULL, `recorded_at` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `patientId` INTEGER NOT NULL, `bloodPressure` TEXT, `heartRate` TEXT, `temperature` TEXT, `oxygenLevel` TEXT, `recordedAt` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -164,37 +164,37 @@
           },
           {
             "fieldPath": "patientId",
-            "columnName": "patient_id",
+            "columnName": "patientId",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "bloodPressure",
-            "columnName": "blood_pressure",
+            "columnName": "bloodPressure",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "heartRate",
-            "columnName": "heart_rate",
-            "affinity": "INTEGER",
-            "notNull": true
+            "columnName": "heartRate",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "temperature",
             "columnName": "temperature",
-            "affinity": "REAL",
-            "notNull": true
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "oxygenLevel",
-            "columnName": "oxygen_level",
-            "affinity": "INTEGER",
-            "notNull": true
+            "columnName": "oxygenLevel",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "recordedAt",
-            "columnName": "recorded_at",
+            "columnName": "recordedAt",
             "affinity": "INTEGER",
             "notNull": false
           }
@@ -358,8 +358,8 @@
         "foreignKeys": []
       },
       {
-        "tableName": "appointment",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `patient_id` INTEGER NOT NULL, `patient_name` TEXT, `clinician_name` TEXT, `clinic_location` TEXT, `reason` TEXT, `status` TEXT, `date` TEXT, `start_time` INTEGER NOT NULL, `end_time` INTEGER NOT NULL, `specialist_name` TEXT)",
+        "tableName": "appointments",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `patientId` INTEGER NOT NULL, `patientName` TEXT, `clinicianName` TEXT, `clinicLocation` TEXT, `reason` TEXT, `status` TEXT, `date` TEXT, `startTimeMillis` INTEGER NOT NULL, `endTimeMillis` INTEGER NOT NULL, `specialistName` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -369,25 +369,25 @@
           },
           {
             "fieldPath": "patientId",
-            "columnName": "patient_id",
+            "columnName": "patientId",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "patientName",
-            "columnName": "patient_name",
+            "columnName": "patientName",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "clinicianName",
-            "columnName": "clinician_name",
+            "columnName": "clinicianName",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "clinicLocation",
-            "columnName": "clinic_location",
+            "columnName": "clinicLocation",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -411,19 +411,19 @@
           },
           {
             "fieldPath": "startTimeMillis",
-            "columnName": "start_time",
+            "columnName": "startTimeMillis",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "endTimeMillis",
-            "columnName": "end_time",
+            "columnName": "endTimeMillis",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "specialistName",
-            "columnName": "specialist_name",
+            "columnName": "specialistName",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -441,7 +441,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5deb79992239f4887a9ab11bba49c5cb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '62175b23fc436461e79bd1ab75c2cc49')"
     ]
   }
 }

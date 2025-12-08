@@ -24,6 +24,7 @@ import com.example.leedstrinity.hospimanagementapp.data.entities.Clinician;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Patient;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Staff;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Vitals;
+import com.example.leedstrinity.hospimanagementapp.security.auth.SecureDatabaseHelper;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -64,6 +65,9 @@ public abstract class AppDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
+                    //  Initialise encryption key before building DB
+                    SecureDatabaseHelper.setKey("mySuperSecretPassphrase");
+
                     INSTANCE = Room.databaseBuilder(
                                     context.getApplicationContext(),
                                     AppDatabase.class,
@@ -86,7 +90,6 @@ public abstract class AppDatabase extends RoomDatabase {
                                                 "Neurology", "Doctor", "Clinic B",
                                                 "07987654321", "bob@hospital.com", "pass123"
                                         );
-                                        // Use INSTANCE directly (already built)
                                         INSTANCE.staffDao().insert(cardiology);
                                         INSTANCE.staffDao().insert(neurology);
                                     });
@@ -99,6 +102,7 @@ public abstract class AppDatabase extends RoomDatabase {
         return INSTANCE;
     }
 }
+
 
 
 

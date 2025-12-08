@@ -36,14 +36,14 @@ public class VitalsViewModel extends AndroidViewModel {
                                        int heartRate,
                                        double temperature,
                                        int oxygenLevel) {
-        Vitals vitals = Vitals.forPatient(
-                patientId,
-                systolicBP,
-                diastolicBP,
-                heartRate,
-                temperature,
-                oxygenLevel
-        );
+        Vitals vitals = new Vitals();
+        vitals.setPatientId(patientId);
+        vitals.setBloodPressure(systolicBP + "/" + diastolicBP);
+        vitals.setHeartRate(String.valueOf(heartRate));
+        vitals.setTemperature(String.valueOf(temperature));
+        vitals.setOxygenLevel(String.valueOf(oxygenLevel));
+        vitals.setRecordedAt(new Date());
+
         AppDatabase.databaseWriteExecutor.execute(() -> vitalsDao.insert(vitals));
     }
 
@@ -52,21 +52,23 @@ public class VitalsViewModel extends AndroidViewModel {
         AppDatabase.databaseWriteExecutor.execute(() -> vitalsDao.update(vitals));
     }
 
-    // Get all vitals for a patient
+    // Get all vitals for a patient (LiveData version)
     public LiveData<List<Vitals>> getVitalsForPatient(long patientId) {
-        return vitalsDao.getVitalsForPatient(patientId);
+        return vitalsDao.getVitalsForPatientLive(patientId);
     }
 
     // Get vitals between two dates
     public LiveData<List<Vitals>> getVitalsBetweenDates(@NonNull Date start, @NonNull Date end) {
-        return vitalsDao.findBetweenDates(start, end);
+        return vitalsDao.findBetweenDatesLive(start, end);
     }
 
     // Get latest vitals for a patient
     public LiveData<Vitals> getLatestVitalsForPatient(long patientId) {
-        return vitalsDao.findLatestForPatient(patientId);
+        return vitalsDao.findLatestForPatientLive(patientId);
     }
 }
+
+
 
 
 

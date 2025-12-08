@@ -26,7 +26,6 @@ public class AppointmentRepository {
         this.api = new ApiClient(context);
     }
 
-
     public LiveData<List<Appointment>> getTodaysAppointments(String clinic, long start, long end) {
         List<Appointment> mapped = new ArrayList<>();
 
@@ -49,8 +48,8 @@ public class AppointmentRepository {
             e.printStackTrace();
         }
 
-        // Return reactive query
-        return dao.findBetween(start, end);
+        // ✅ Use the LiveData version of the query
+        return dao.findBetweenLive(start, end);
     }
 
     public Appointment bookOrReschedule(Appointment appt) {
@@ -61,7 +60,6 @@ public class AppointmentRepository {
             dto.setId(appt.getId());
             dto.setPatientName(appt.getPatientName());
             dto.setDate(appt.getDate());
-            // Removed dto.setTime(appt.getTime());
             dto.setReason(appt.getReason());
             dto.setSpecialistName(appt.getSpecialistName());
             dto.setClinicLocation(appt.getClinicLocation());
@@ -96,18 +94,16 @@ public class AppointmentRepository {
         return saved;
     }
 
-
     public LiveData<List<Appointment>> detectConflicts(String specialistName, long start, long end) {
-        return dao.overlappingByName(specialistName, start, end);
+        // ✅ Use the LiveData version of overlapping query
+        return dao.overlappingByNameLive(specialistName, start, end);
     }
-
 
     private Appointment map(AppointmentDto dto) {
         Appointment appointment = new Appointment();
 
         appointment.setPatientName(dto.getPatientName());
         appointment.setDate(dto.getDate());
-        // Removed appointment.setTime(dto.getTime());
         appointment.setReason(dto.getReason());
         appointment.setSpecialistName(dto.getSpecialistName());
         appointment.setClinicLocation(dto.getClinicLocation());
@@ -122,6 +118,7 @@ public class AppointmentRepository {
         return appointment;
     }
 }
+
 
 
 

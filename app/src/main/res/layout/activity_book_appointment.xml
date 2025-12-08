@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -7,7 +8,8 @@
     <!-- 📋 Scrollable appointment form -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:padding="24dp">
 
         <LinearLayout
@@ -57,7 +59,6 @@
                 android:inputType="text"
                 android:layout_marginBottom="24dp" />
 
-
             <Spinner
                 android:id="@+id/spinnerSpecialty"
                 android:layout_width="match_parent"
@@ -70,8 +71,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
 
-
-
             <!-- Clinic selection -->
             <Spinner
                 android:id="@+id/spinnerClinicLocation"
@@ -81,19 +80,24 @@
                 android:layout_marginBottom="24dp" />
 
             <!-- Buttons -->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonSubmitAppointment"
+                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Submit Appointment" />
+                android:text="Submit Appointment"
+                android:backgroundTint="#2196F3"
+                android:textColor="@android:color/white"/>
 
-            <Button
-                android:id="@+id/buttonBackToMain"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGoBack"
+                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Back to Main Page"
-                android:layout_marginTop="16dp" />
-
+                android:text="Back to Dashboard"
+                android:backgroundTint="#4CAF50"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="24dp"/>
         </LinearLayout>
     </ScrollView>
 
@@ -102,8 +106,9 @@
         android:id="@+id/appointmentContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp" />
+        android:layout_margin="8dp" />
 </LinearLayout>
+
 
 
 

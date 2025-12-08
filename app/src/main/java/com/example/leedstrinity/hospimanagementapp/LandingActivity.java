@@ -1,9 +1,9 @@
 package com.example.leedstrinity.hospimanagementapp;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,31 +13,54 @@ import androidx.core.content.ContextCompat;
 
 public class LandingActivity extends AppCompatActivity {
 
+    private static final String CORRECT_PIN = "1234"; // replace with secure storage
+
+    // Landing page UI
     private Button btnLogin, btnSignup, btnBiometricLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_landing);
 
-        // Match XML IDs
-        btnLogin = findViewById(R.id.btnLoginPatient);   // login button
-        btnSignup = findViewById(R.id.btnSignupPatient); // signup button
-        btnBiometricLogin = findViewById(R.id.btnBiometricLogin); // biometric button
+        // Step 1: show PIN gate first
+        setContentView(R.layout.activity_pin_gate);
 
-        // Login → unified LoginActivity
+        EditText pinInput = findViewById(R.id.pinInput);
+        Button btnSubmit = findViewById(R.id.btnSubmitPin);
+
+        btnSubmit.setOnClickListener(v -> {
+            String enteredPin = pinInput.getText().toString();
+            if (CORRECT_PIN.equals(enteredPin)) {
+                // Step 2: switch to landing layout once PIN is correct
+                setContentView(R.layout.activity_landing);
+
+                // Step 3: initialize landing page UI
+                initLandingUI();
+            } else {
+                Toast.makeText(this, "Incorrect PIN", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void initLandingUI() {
+        // Buttons
+        btnLogin = findViewById(R.id.btnLoginPatient);
+        btnSignup = findViewById(R.id.btnSignupPatient);
+        btnBiometricLogin = findViewById(R.id.btnBiometricLogin);
+
+        // Login → LoginActivity
         btnLogin.setOnClickListener(v -> {
             Intent intent = new Intent(LandingActivity.this, LoginActivity.class);
             startActivity(intent);
         });
 
-        // Create Account → SignupActivity
+        // Signup → SignupActivity
         btnSignup.setOnClickListener(v -> {
             Intent intent = new Intent(LandingActivity.this, SignupActivity.class);
             startActivity(intent);
         });
 
-        // Biometric Login → check availability
+        // Biometric login
         btnBiometricLogin.setOnClickListener(v -> {
             if (isEmulator()) {
                 Toast.makeText(this, "Biometric not supported on emulator. Using password login.", Toast.LENGTH_SHORT).show();
@@ -58,7 +81,6 @@ public class LandingActivity extends AppCompatActivity {
                             @Override
                             public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
                                 super.onAuthenticationSucceeded(result);
-                                // Success → go to MainActivity or dashboard
                                 Intent intent = new Intent(LandingActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -94,13 +116,16 @@ public class LandingActivity extends AppCompatActivity {
         });
     }
 
-    // Emulator detection helper
     private boolean isEmulator() {
         String product = android.os.Build.PRODUCT;
         return product != null &&
                 (product.contains("sdk") || product.contains("emulator") || product.contains("generic"));
     }
 }
+
+
+
+
 
 
 

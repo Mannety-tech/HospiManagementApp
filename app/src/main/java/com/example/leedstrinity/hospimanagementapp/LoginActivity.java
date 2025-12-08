@@ -31,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         patientLoginBtn = findViewById(R.id.btn_patient_login);
         staffLoginBtn = findViewById(R.id.btn_staff_login);
         btnGoToSignup = findViewById(R.id.btnGoToSignup);
+        btnBack = findViewById(R.id.btnBack);
         forgotPassword = findViewById(R.id.tvForgotPassword);
 
         // --- Use singleton AppDatabase ---
@@ -50,7 +51,9 @@ public class LoginActivity extends AppCompatActivity {
                 Patient patient = db.patientDao().login(email, password);
                 runOnUiThread(() -> {
                     if (patient != null) {
+                        // ✅ Send patient to PatientDashboardActivity
                         Intent intent = new Intent(LoginActivity.this, PatientDashboardActivity.class);
+                        intent.putExtra("patientId", patient.getId());
                         intent.putExtra("patientName", patient.getName());
                         intent.putExtra("patientEmail", patient.getEmail());
                         intent.putExtra("nhsNumber", patient.getNhsNumber());
@@ -77,7 +80,8 @@ public class LoginActivity extends AppCompatActivity {
                 Staff staff = db.staffDao().login(email, password);
                 runOnUiThread(() -> {
                     if (staff != null) {
-                        Intent intent = new Intent(LoginActivity.this, AdminPortalActivity.class);
+                        // ✅ Staff go to MainActivity
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("staffName", staff.getName());
                         intent.putExtra("staffEmail", staff.getEmail());
                         intent.putExtra("employeeNumber", staff.getEmployeeNumber());
@@ -91,12 +95,14 @@ public class LoginActivity extends AppCompatActivity {
             }).start();
         });
 
-
         // --- Go to Signup ---
         btnGoToSignup.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
             startActivity(intent);
         });
+
+        // --- Back button ---
+        btnBack.setOnClickListener(v -> finish());
 
         // --- Forgot password ---
         forgotPassword.setOnClickListener(v -> {
@@ -105,4 +111,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 }
+
+
+
+
+
+
 

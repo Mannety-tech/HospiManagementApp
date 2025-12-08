@@ -11,10 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.leedstrinity.hospimanagementapp.R;
 import com.example.leedstrinity.hospimanagementapp.data.entities.Appointment;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.ViewHolder> {
+public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder> {
 
     public interface OnItemClickListener {
         void onItemClick(Appointment appointment);
@@ -41,16 +43,16 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AppointmentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_appointment, parent, false);
-        return new ViewHolder(view);
+        return new AppointmentViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Appointment appointment = appointments.get(position);
-        holder.bind(appointment, listener);
+    public void onBindViewHolder(@NonNull AppointmentViewHolder holder, int position) {
+        Appointment appt = appointments.get(position);
+        holder.bind(appt, listener);
     }
 
     @Override
@@ -58,31 +60,41 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         return appointments.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView tvPatientName;
-        private final TextView tvReason;
+    static class AppointmentViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvDate;
+        private final TextView tvClinic;
+        private final TextView tvSpecialist;
+        private final TextView tvStatus;
+        private final TextView tvReason;
 
-        public ViewHolder(View itemView) {
+        AppointmentViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvPatientName = itemView.findViewById(R.id.tvPatient);
-            tvReason = itemView.findViewById(R.id.tvReason);
             tvDate = itemView.findViewById(R.id.tvDate);
+            tvClinic = itemView.findViewById(R.id.tvClinic);
+            tvSpecialist = itemView.findViewById(R.id.tvSpecialist);
+            tvStatus = itemView.findViewById(R.id.tvStatus);
+            tvReason = itemView.findViewById(R.id.tvReason);
         }
 
-        public void bind(Appointment appointment, OnItemClickListener listener) {
-            tvPatientName.setText(appointment.getPatientName());
-            tvReason.setText(appointment.getReason());
-            tvDate.setText(appointment.getDate());
+        public void bind(Appointment appt, OnItemClickListener listener) {
+            String formattedTime = DateFormat.getTimeInstance(DateFormat.SHORT)
+                    .format(new Date(appt.getStartTimeMillis()));
+
+            tvDate.setText(appt.getDate() + " at " + formattedTime);
+            tvClinic.setText("Clinic: " + appt.getClinicLocation());
+            tvSpecialist.setText("Specialist: " + appt.getSpecialistName());
+            tvStatus.setText("Status: " + appt.getStatus());
+            tvReason.setText("Reason: " + appt.getReason());
 
             if (listener != null) {
-                itemView.setOnClickListener(v -> listener.onItemClick(appointment));
+                itemView.setOnClickListener(v -> listener.onItemClick(appt));
             } else {
                 itemView.setOnClickListener(null);
             }
         }
     }
 }
+
 
 
 

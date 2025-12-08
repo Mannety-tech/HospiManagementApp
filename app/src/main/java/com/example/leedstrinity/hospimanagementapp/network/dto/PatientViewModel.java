@@ -1,8 +1,5 @@
 package com.example.leedstrinity.hospimanagementapp.network.dto;
 
-
-
-
 import android.app.Application;
 
 import androidx.annotation.NonNull;
@@ -16,7 +13,6 @@ import com.example.leedstrinity.hospimanagementapp.data.entities.Patient;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 
 public class PatientViewModel extends AndroidViewModel {
 
@@ -43,8 +39,9 @@ public class PatientViewModel extends AndroidViewModel {
         return patientDao.getAllPatients();
     }
 
-    public LiveData<Patient> findPatientById(int id) {
-        return patientDao.findPatientById(id);
+    // Use the correct DAO method and long type
+    public LiveData<Patient> findPatientById(long id) {
+        return patientDao.findByIdLive(id);
     }
 
     // Optional: synchronous login (not LiveData)
@@ -52,6 +49,7 @@ public class PatientViewModel extends AndroidViewModel {
         return patientDao.login(email, password);
     }
 }
+
 
 
 

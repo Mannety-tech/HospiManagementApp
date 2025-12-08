@@ -2,62 +2,29 @@ package com.example.leedstrinity.hospimanagementapp.data.entities;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.room.ColumnInfo;
+import androidx.room.TypeConverters;
 
+import com.example.leedstrinity.hospimanagementapp.data.Converters;
+import com.example.leedstrinity.hospimanagementapp.security.auth.SecureDatabaseHelper;
+
+import java.text.DateFormat;
 import java.util.Date;
 
 @Entity(tableName = "vitals")
+@TypeConverters({Converters.class})
 public class Vitals {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
 
-    @ColumnInfo(name = "patient_id")
     private long patientId;
 
-    @ColumnInfo(name = "blood_pressure")
-    private String bloodPressure;
+    private String bloodPressure;   // e.g. "120/80"
+    private String heartRate;       // e.g. "72"
+    private String temperature;     // e.g. "36.8"
+    private String oxygenLevel;     // e.g. "98%"
 
-    @ColumnInfo(name = "heart_rate")
-    private int heartRate;
-
-    @ColumnInfo(name = "temperature")
-    private double temperature;
-
-    @ColumnInfo(name = "oxygen_level")
-    private int oxygenLevel;
-
-    @ColumnInfo(name = "recorded_at")
     private Date recordedAt;
-
-    // --- Constructors ---
-    public Vitals() {}
-
-    public Vitals(long patientId,
-                  String bloodPressure,
-                  int heartRate,
-                  double temperature,
-                  int oxygenLevel,
-                  Date recordedAt) {
-        this.patientId = patientId;
-        this.bloodPressure = bloodPressure;
-        this.heartRate = heartRate;
-        this.temperature = temperature;
-        this.oxygenLevel = oxygenLevel;
-        this.recordedAt = recordedAt;
-    }
-
-    // --- Static factory method ---
-    public static Vitals forPatient(long patientId,
-                                    int systolic,
-                                    int diastolic,
-                                    int heartRate,
-                                    double temperature,
-                                    int oxygenLevel) {
-        String bp = systolic + "/" + diastolic;
-        Date now = new Date();
-        return new Vitals(patientId, bp, heartRate, temperature, oxygenLevel, now);
-    }
 
     // --- Getters and setters ---
     public long getId() { return id; }
@@ -66,21 +33,30 @@ public class Vitals {
     public long getPatientId() { return patientId; }
     public void setPatientId(long patientId) { this.patientId = patientId; }
 
-    public String getBloodPressure() { return bloodPressure; }
-    public void setBloodPressure(String bloodPressure) { this.bloodPressure = bloodPressure; }
+    public String getBloodPressure() { return SecureDatabaseHelper.decrypt(bloodPressure); }
+    public void setBloodPressure(String bpPlainText) { this.bloodPressure = SecureDatabaseHelper.encrypt(bpPlainText); }
 
-    public int getHeartRate() { return heartRate; }
-    public void setHeartRate(int heartRate) { this.heartRate = heartRate; }
+    public String getHeartRate() { return SecureDatabaseHelper.decrypt(heartRate); }
+    public void setHeartRate(String hrPlainText) { this.heartRate = SecureDatabaseHelper.encrypt(hrPlainText); }
 
-    public double getTemperature() { return temperature; }
-    public void setTemperature(double temperature) { this.temperature = temperature; }
+    public String getTemperature() { return SecureDatabaseHelper.decrypt(temperature); }
+    public void setTemperature(String tempPlainText) { this.temperature = SecureDatabaseHelper.encrypt(tempPlainText); }
 
-    public int getOxygenLevel() { return oxygenLevel; }
-    public void setOxygenLevel(int oxygenLevel) { this.oxygenLevel = oxygenLevel; }
+    public String getOxygenLevel() { return SecureDatabaseHelper.decrypt(oxygenLevel); }
+    public void setOxygenLevel(String oxygenPlainText) { this.oxygenLevel = SecureDatabaseHelper.encrypt(oxygenPlainText); }
 
     public Date getRecordedAt() { return recordedAt; }
     public void setRecordedAt(Date recordedAt) { this.recordedAt = recordedAt; }
+
+    // ✅ Helper method to format recordedAt nicely
+    public String getFormattedRecordedAt() {
+        if (recordedAt == null) return "";
+        return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(recordedAt);
+    }
 }
+
+
+
 
 
 
